@@ -1,0 +1,20 @@
+#first {
+	padding: 10px 0px;
+	margin: 20px;
+}
+#second {
+	margin: 20px;
+}
+#third {
+	margin: 20px;
+}
+#fourth {
+	margin: 20px;
+}
+#fifth {
+	margin: 20px;
+}
+   .in-line{
+   	  display: inline-block;
+ margin: 0;
+   }

@@ -1,0 +1,75 @@
+  .total_check {
+      padding: 10px;
+      position: relative;
+      width: 100%;
+      border-top: 1px solid #767676;
+   }
+   .total_check .btn_txt {
+      top: 8px;
+      position: absolute;
+      right: 0;
+      color: #767676;
+   }
+   button {
+      background-color:transparent;
+      border: 1px none;
+      cursor: pointer;
+   }
+   
+   .bdr_nor{
+		border-top: 1px solid #e6e6e6;
+		display: flex;
+		width : 100%;
+    }
+    #common_header {
+    	background-color: antiquewhite;
+    	height: 105px;
+    	top: 0;
+    	left: 0;
+    	right: 0;
+    	position: fixed;
+    }
+	#contents {
+		padding: 25px 15px 30px;
+	}
+	body {
+		padding-top: 105px;
+	}
+	.list_thumType > li .area_txt {
+	    padding-left: 20px;
+	}
+	.list_thumType > li {
+		padding: 15px 0 25px;
+	}
+	.tit {
+		padding-bottom: 5px;
+	}
+	.list_thumType > li .area_txt .tit {
+	    overflow: hidden;
+	    display: inline-block;
+	    width: 100%;
+	    font-weight: bold;
+	    font-size: 20px;
+	    color: #000;
+	    text-overflow: ellipsis;
+	    white-space: nowrap;
+	}
+	body, input, textarea, button, select, table {
+	    font: 13px/1.4 NotoSansKR,NotoSansJP,"돋움",Dotum,AppleGothic,Sans-serif;
+	    color: #666;
+    }
+    #logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    }
+    #menu a{
+        margin-left: 10px;
+    margin-right: 10px;
+
+    font-size: 16px;
+    color: #58595b;
+    text-decoration: none;
+    font-family: Helvetica, Arial, sans-serif;
+    }

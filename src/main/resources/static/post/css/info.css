@@ -1,0 +1,56 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+div {
+    box-sizing: border-box;
+}
+#contents {
+    width: 980px;
+    margin: 0 auto;
+    padding: 0 20px 27px 20px;
+}
+.titleType1 {
+    text-align: center;
+    position: relative;
+}
+.titleType1 h2 {
+    padding: 19px 0 0;
+    text-align: center;
+    margin: 0;
+    
+    overflow: hidden;
+    font-weight: 800;
+    color: #333;
+    font-size: 36px;
+    letter-spacing: -1px;
+    word-break: keep-all;
+}
+.titleType1 .area_address {
+    display: inline-block;
+    padding-top: 10px;
+}
+.titleType1 .area_address span {
+    float: left;
+    font-size: 16px;
+    color: #666;
+}
+.schedule_info {
+    padding: 40px 150px 40px;
+    border-top: 1px solid #e6e6e6;
+    border-bottom: 1px solid #e6e6e6;
+}
+.wrap_contView {
+    position: relative;
+    width: 100%;
+    margin-top: 24px;
+}
+.wrap_contView .area_txtView {
+    color: #333;
+    font-size: 18px;
+    line-height: 1.7;
+    letter-spacing: -1px;
+}
+.course_detail .area_txtView{
+	margin: 30px 20px;
+}

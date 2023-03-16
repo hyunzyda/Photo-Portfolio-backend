@@ -1,0 +1,74 @@
+@charset "utf-8";
+@import url(reset.css);
+
+  --#{$prefix}accordion-color: #{$accordion-color};
+  --#{$prefix}accordion-bg: #{$accordion-bg};
+  --#{$prefix}accordion-transition: #{$accordion-transition};
+  --#{$prefix}accordion-border-color: #{$accordion-border-color};
+  --#{$prefix}accordion-border-width: #{$accordion-border-width};
+  --#{$prefix}accordion-border-radius: #{$accordion-border-radius};
+  --#{$prefix}accordion-inner-border-radius: #{$accordion-inner-border-radius};
+  --#{$prefix}accordion-btn-padding-x: #{$accordion-button-padding-x};
+  --#{$prefix}accordion-btn-padding-y: #{$accordion-button-padding-y};
+  --#{$prefix}accordion-btn-color: #{$accordion-button-color};
+  --#{$prefix}accordion-btn-bg: #{$accordion-button-bg};
+  --#{$prefix}accordion-btn-icon: #{escape-svg($accordion-button-icon)};
+  --#{$prefix}accordion-btn-icon-width: #{$accordion-icon-width};
+  --#{$prefix}accordion-btn-icon-transform: #{$accordion-icon-transform};
+  --#{$prefix}accordion-btn-icon-transition: #{$accordion-icon-transition};
+  --#{$prefix}accordion-btn-active-icon: #{escape-svg($accordion-button-active-icon)};
+  --#{$prefix}accordion-btn-focus-border-color: #{$accordion-button-focus-border-color};
+  --#{$prefix}accordion-btn-focus-box-shadow: #{$accordion-button-focus-box-shadow};
+  --#{$prefix}accordion-body-padding-x: #{$accordion-body-padding-x};
+  --#{$prefix}accordion-body-padding-y: #{$accordion-body-padding-y};
+  --#{$prefix}accordion-active-color: #{$accordion-button-active-color};
+  --#{$prefix}accordion-active-bg: #{$accordion-button-active-bg};
+  
+
+body {
+	background: #fffcf6 url(../images//top.png) 0 0 repeat-x;
+	font-family: maple;
+	color: #555;
+	min-width: 320px;
+	width: 1920px;
+}
+
+#header-wrap {
+	background: url(../images/blue.png) 0 100% repeat-x;
+	margin-bottom: 80px;
+}
+
+.header-inner {
+	position: relative;
+	height: 172px;
+}
+
+/*하단 배너 지역*/
+#banner {
+	height: 160px;
+	background-color: white;
+}
+
+/*푸터 영역*/
+#footer-wrap {
+	height: 110px;
+	background-color: #fff;
+	border-top: solid 1px black;
+}
+
+
+/*푸터 영역*/
+
+#clear {
+	clear: both;
+}
+
+/*폰트*/
+@font-face {
+	font-family: 'maple';
+	src: url('../src/main/webapp/main/font/Maplystory Bold.ttf')
+		format('truetype');
+	src: url('../src/main/webapp/main/font/Maplystory Bold.ttf')
+		format('truetype');
+}
+/*폰트*/
