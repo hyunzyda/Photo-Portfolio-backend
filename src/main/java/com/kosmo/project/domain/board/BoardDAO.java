@@ -14,7 +14,7 @@ import com.kosmo.project.dto.Board;
 
 @Component
 public class BoardDAO {
-	   final String JDBC_DRIVER = "org.mariadb.jdbc.Driverdddddddddddd";
+	   final String JDBC_DRIVER = "org.mariadb.jdbc.Driver";
 	   final String DB_IP = "springboot-db.cfv6476o3rzm.ap-northeast-2.rds.amazonaws.com";
 	   final String DB_PORT = "3306";
 	   final String DB_NAME = "project";
