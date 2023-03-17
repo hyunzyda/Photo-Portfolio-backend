@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kosmo.project.dao.UserDAO;
@@ -48,7 +47,7 @@ public class UserController {
     }
     
     // 사용자 정보 조회
-    @GetMapping("/users/{id}")
+    @GetMapping("/user/{id}")
     public ResponseEntity<User> getUser(@PathVariable(value = "id") int id) {
         User user = userDao.getUserById(id);
         if(user == null) {
@@ -58,7 +57,7 @@ public class UserController {
     }
 
     // 사용자 정보 수정
-    @PutMapping("/users/{id}")
+    @PutMapping("/user/{id}")
     public ResponseEntity<Void> updateUser(@PathVariable(value = "id") int id,@Valid @RequestBody User user) {
         boolean result = userDao.updateUser(id, user);
         if(result) {
@@ -69,7 +68,7 @@ public class UserController {
     }
 
     // 사용자 정보 삭제
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/user/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable(value = "id") int id) {
         boolean result = userDao.deleteUser(id);
         if(result) {

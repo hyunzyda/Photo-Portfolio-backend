@@ -15,13 +15,13 @@ import com.kosmo.project.dto.User;
 @Repository
 public class UserDAO {
 	   final String JDBC_DRIVER = "org.mariadb.jdbc.Driver";
-	   final String DB_URL = "jdbc:mariadb://localhost:3306/project";
+	   final String DB_URL = "jdbc:mariadb://192.168.0.208:3306/phopo";
 
 	   public Connection open() {
 	      Connection conn = null;
 	      try {
 	         Class.forName(JDBC_DRIVER);
-	         conn = DriverManager.getConnection(DB_URL, "kosmo", "1234");
+	         conn = DriverManager.getConnection(DB_URL, "kosmo321", "1234");
 	      } catch (Exception e) {
 	         e.printStackTrace();
 	      }
@@ -32,7 +32,7 @@ public class UserDAO {
 	    public List<User> getAllUsers() {
 				
 	        List<User> users = new ArrayList<>();
-	        String sql = "SELECT id, userid, userps, username FROM user";	        
+	        String sql = "SELECT id, userid, userps, username FROM test";	        
 	        
 	        try(Connection conn=open();	
 	        	PreparedStatement pstmt = conn.prepareStatement(sql);	        
@@ -53,7 +53,7 @@ public class UserDAO {
 	    
 	    // 사용자 추가
 	    public boolean addUser(User user) {		
-	        String sql = "INSERT INTO user VALUES (?,?, ?, ?)";
+	        String sql = "INSERT INTO test VALUES (?,?, ?, ?)";
 	        
 	        try(Connection conn=open();
 	        	PreparedStatement pstmt = conn.prepareStatement(sql);) {
@@ -73,7 +73,7 @@ public class UserDAO {
 	    // 사용자 정보 조회
 	    public User getUserById(int id) {
 			
-	        String sql = "SELECT userid, userps, username FROM user WHERE id = ?";
+	        String sql = "SELECT userid, userps, username FROM test WHERE id = ?";
 	        try(Connection conn=open();
 	        	PreparedStatement pstmt = conn.prepareStatement(sql)) {
 	            pstmt.setInt(1, id);
@@ -98,7 +98,7 @@ public class UserDAO {
 
 	    // 사용자 정보 수정
 	    public boolean updateUser(int id, User user) {
-	        String sql = "UPDATE user SET userid = ?, userps = ?, username = ? WHERE id = ?";
+	        String sql = "UPDATE test SET userid = ?, userps = ?, username = ? WHERE id = ?";
 	        try(Connection conn=open();
 	        	PreparedStatement pstmt = conn.prepareStatement(sql);) {
 	            pstmt.setString(1, user.getUserid());
@@ -116,7 +116,7 @@ public class UserDAO {
 
 	    // 사용자 정보 삭제
 	    public boolean deleteUser(int id) {
-	        String sql = "DELETE FROM user WHERE id = ?";
+	        String sql = "DELETE FROM test WHERE id = ?";
 	        try(Connection conn=open();
 	            PreparedStatement pstmt = conn.prepareStatement(sql)) {
 	            pstmt.setInt(1, id);
