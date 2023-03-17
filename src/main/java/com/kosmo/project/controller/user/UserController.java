@@ -24,17 +24,6 @@ public class UserController {
     @Autowired
     private UserDAO userDao;
     
-    // 사용자 정보 추가    
-    @PostMapping("/user/add")
-    public ResponseEntity<Void> addUser(@Valid @RequestBody User user) {
-        boolean result = userDao.addUser(user);
-        if(result) {
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-    
     // 모든 사용자 정보 조회
     @GetMapping("/user")
     public ResponseEntity<List<User>> getAllUsers() {
@@ -45,6 +34,17 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+    
+    // 사용자 정보 추가    
+    @PostMapping("/user/add")
+    public ResponseEntity<Void> addUser(@Valid @RequestBody User user) {
+        boolean result = userDao.addUser(user);
+        if(result) {
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }    
     
     // 사용자 정보 조회
     @GetMapping("/user/{id}")
