@@ -32,17 +32,25 @@ public class UserDAO {
 	    public List<User> getAllUsers() {
 				
 	        List<User> users = new ArrayList<>();
-	        String sql = "SELECT id, userid, userps, username FROM test";	        
+	        String sql = "SELECT * FROM user";	        
 	        
 	        try(Connection conn=open();	
 	        	PreparedStatement pstmt = conn.prepareStatement(sql);	        
 	        	ResultSet rs = pstmt.executeQuery();) {
 	            while(rs.next()) {
-	                User user = new User();
-	                user.setId(rs.getInt("id"));
-	                user.setUserid(rs.getString("userid"));
-	                user.setUserps(rs.getString("userps"));
-	                user.setUsername(rs.getString("username"));
+	                User user = new User();	 
+	                user.setUserId(rs.getInt("user_id"));
+	                user.setEmail(rs.getString("email"));
+	                user.setPassword(rs.getString("password"));
+	                user.setNickname(rs.getString("nickname"));
+	                user.setPhone(rs.getString("phone"));
+	                user.setGender(rs.getString("gender"));
+	                user.setBirth(rs.getDate("birth").toLocalDate());
+	                user.setWebsite(rs.getString("website"));
+	                user.setIntroduce(rs.getString("introduce"));
+	                user.setProImage(rs.getString("profile_image"));
+	                user.setRole(rs.getString("role"));
+	                                
 	                users.add(user);
 	            }
 	        } catch(SQLException e) {
@@ -51,16 +59,16 @@ public class UserDAO {
 	        return users;
 	    }
 	    
+	    
 	    // 사용자 추가
 	    public boolean addUser(User user) {		
-	        String sql = "INSERT INTO test VALUES (?,?, ?, ?)";
-	        
+	        String sql = "INSERT INTO user (email,password,nickname,phone) VALUES (?,?,?,?)";	  
 	        try(Connection conn=open();
 	        	PreparedStatement pstmt = conn.prepareStatement(sql);) {
-	        	pstmt.setInt(1, user.getId());
-	            pstmt.setString(2, user.getUserid());
-	            pstmt.setString(3, user.getUserps());
-	            pstmt.setString(4, user.getUsername());
+	        	pstmt.setString(1, user.getEmail());
+	        	pstmt.setString(2, user.getPassword());
+	        	pstmt.setString(3, user.getNickname());
+	        	pstmt.setString(4, user.getPhone());
 
 	            int count = pstmt.executeUpdate();
 	            return count > 0;
@@ -73,7 +81,7 @@ public class UserDAO {
 	    // 사용자 정보 조회
 	    public User getUserById(int id) {
 			
-	        String sql = "SELECT userid, userps, username FROM test WHERE id = ?";
+	        String sql = "SELECT * FROM user WHERE user_id=?";
 	        try(Connection conn=open();
 	        	PreparedStatement pstmt = conn.prepareStatement(sql)) {
 	            pstmt.setInt(1, id);
@@ -81,10 +89,17 @@ public class UserDAO {
 	            try(ResultSet rs = pstmt.executeQuery()) {
 	                if(rs.next()) {
 	                    User user = new User();
-	                    user.setId(id);
-	                    user.setUserid(rs.getString("userid"));
-	                    user.setUserps(rs.getString("userps"));
-	                    user.setUsername(rs.getString("username"));
+		                user.setUserId(rs.getInt("user_id"));
+		                user.setEmail(rs.getString("email"));
+		                user.setPassword(rs.getString("password"));
+		                user.setNickname(rs.getString("nickname"));
+		                user.setPhone(rs.getString("phone"));
+		                user.setGender(rs.getString("gender"));
+		                user.setBirth(rs.getDate("birth").toLocalDate());
+		                user.setWebsite(rs.getString("website"));
+		                user.setIntroduce(rs.getString("introduce"));
+		                user.setProImage(rs.getString("profile_image"));
+		                user.setRole(rs.getString("role"));
 	                    return user;
 	                } else {
 	                    return null;
@@ -98,13 +113,14 @@ public class UserDAO {
 
 	    // 사용자 정보 수정
 	    public boolean updateUser(int id, User user) {
-	        String sql = "UPDATE test SET userid = ?, userps = ?, username = ? WHERE id = ?";
+	        String sql = "UPDATE user SET email = ?, password = ?, nickname = ?, phone = ? WHERE user_id = ?";
 	        try(Connection conn=open();
 	        	PreparedStatement pstmt = conn.prepareStatement(sql);) {
-	            pstmt.setString(1, user.getUserid());
-	            pstmt.setString(2, user.getUserps());
-	            pstmt.setString(3, user.getUsername());
-	            pstmt.setInt(4, id);
+	        	pstmt.setString(1, user.getEmail());
+	            pstmt.setString(2, user.getPassword());
+	            pstmt.setString(3, user.getNickname());
+	            pstmt.setString(4, user.getPhone());
+	            pstmt.setInt(5, id);
 
 	            int count = pstmt.executeUpdate();
 	            return count > 0;
@@ -116,7 +132,7 @@ public class UserDAO {
 
 	    // 사용자 정보 삭제
 	    public boolean deleteUser(int id) {
-	        String sql = "DELETE FROM test WHERE id = ?";
+	        String sql = "DELETE FROM user WHERE user_id = ?";
 	        try(Connection conn=open();
 	            PreparedStatement pstmt = conn.prepareStatement(sql)) {
 	            pstmt.setInt(1, id);
@@ -127,6 +143,5 @@ public class UserDAO {
 	            return false;
 	        }
 	    }
-
 
 }
