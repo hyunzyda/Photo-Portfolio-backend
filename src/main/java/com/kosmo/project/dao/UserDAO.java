@@ -32,8 +32,7 @@ public class UserDAO {
 	    public List<User> getAllUsers() {
 				
 	        List<User> users = new ArrayList<>();
-	        String sql = "SELECT user_id, email, password, nickname, phone, gender, birth,"
-	        		+ " website, introduce, profile_image, role FROM user";	        
+	        String sql = "SELECT * FROM user";	        
 	        
 	        try(Connection conn=open();	
 	        	PreparedStatement pstmt = conn.prepareStatement(sql);	        
@@ -82,8 +81,7 @@ public class UserDAO {
 	    // 사용자 정보 조회
 	    public User getUserById(int id) {
 			
-	        String sql = "SELECT user_id, email, password, nickname, phone, gender, birth,"
-	        		+ " website, introduce, profile_image, role FROM user WHERE user_id=?";
+	        String sql = "SELECT * FROM user WHERE user_id=?";
 	        try(Connection conn=open();
 	        	PreparedStatement pstmt = conn.prepareStatement(sql)) {
 	            pstmt.setInt(1, id);
