@@ -1,4 +1,4 @@
-package com.kosmo.project.controller.user;
+package com.kosmo.project.controller;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class UserController {
         } else {
             return ResponseEntity.notFound().build();
         }
-    }
+    }   
     
     // 사용자 정보 추가    
     @PostMapping("/user/add")
