@@ -1,4 +1,4 @@
-package com.kosmo.project.domain.user;
+package com.kosmo.project.controller.user;
 
 import java.util.List;
 
