@@ -24,4 +24,11 @@ public class User {
 
     public User() {
     }
+    
+    public User(String email,String password, String nickname, String phone) {
+    	this.email=email;
+    	this.password=password;
+    	this.nickname=nickname;
+    	this.phone=phone;
+    }
 }
