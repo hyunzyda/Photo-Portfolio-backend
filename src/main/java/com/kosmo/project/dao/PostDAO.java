@@ -23,7 +23,7 @@ public class PostDAO {
 	      Connection conn = null;
 	      try {
 	         Class.forName(JDBC_DRIVER);
-	         conn = DriverManager.getConnection(DB_URL, "kosmo321", "1234");
+	         conn = DriverManager.getConnection(DB_URL, "kosmo123", "1234");
 	      } catch (Exception e) {
 	         e.printStackTrace();
 	      }
