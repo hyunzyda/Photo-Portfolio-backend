@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class User {
 
-    private int userId;
+    private int userid;
     private String email;
     private String password;
     private String nickname;
@@ -23,6 +23,10 @@ public class User {
     private String role;
 
     public User() {
+    }
+    public User(String email, String password) {
+    	this.email=email;
+    	this.password=password;
     }
     
     public User(String email,String password, String nickname, String phone) {

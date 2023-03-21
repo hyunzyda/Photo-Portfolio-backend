@@ -31,9 +31,9 @@ public class UserDAO {
     }
 
     // 사용자 정보 조회
-    public User getUserById(int id) {
-        String sql = "SELECT * FROM user WHERE user_id=?";
-        return jdbcTemplate.queryForObject(sql, new Object[] { id }, new UserRowMapper());
+    public User getUserByEmail(String email) {
+        String sql = "SELECT * FROM user WHERE email=?";
+        return jdbcTemplate.queryForObject(sql, new Object[] { email }, new UserRowMapper());
     }
 
     // 사용자 정보 수정
@@ -49,11 +49,12 @@ public class UserDAO {
         int count = jdbcTemplate.update(sql, id);
         return count > 0;
     }
+    
     private class UserRowMapper implements RowMapper<User> {
         @Override
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
             User user = new User();
-            user.setUserId(rs.getInt("user_id"));
+            user.setUserid(rs.getInt("user_id"));
             user.setEmail(rs.getString("email"));
             user.setPassword(rs.getString("password"));
             user.setNickname(rs.getString("nickname"));
@@ -69,6 +70,5 @@ public class UserDAO {
             user.setRole(rs.getString("role"));
             return user;
         }
-    }
-
+    }    
 }
