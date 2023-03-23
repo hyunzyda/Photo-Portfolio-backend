@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +39,8 @@ public class PostController {
 	//게시글 추가
 	@PostMapping("/post/add")
 	public ResponseEntity<Void> addPost(@Valid @RequestBody Post post){
+//		String email = SecurityContextHolder.getContext().getAuthentication().getName();
+//		이런식으로 토큰payload로 정의되어있는 email을 꺼내서 쓸수있다
 		boolean result = postDao.addPost(post);
 		if(result) {
 			return ResponseEntity.status(HttpStatus.CREATED).build();

@@ -15,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.kosmo.project.UserService;
+import com.kosmo.project.service.UserService;
 import com.kosmo.project.util.JwtUtil;
 
 import io.jsonwebtoken.Claims;
