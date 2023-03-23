@@ -11,6 +11,7 @@ import lombok.Setter;
 public class Post {
 
 	private int post_id;
+	private String email;
 	private String content;
 	private String image_url;
 	private int user_id;

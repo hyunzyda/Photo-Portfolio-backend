@@ -47,9 +47,9 @@ public class PostController {
 	}
 	
 	//게시글 조회
-	@GetMapping("/post/{id}")
-	public ResponseEntity<Post> getPost(@PathVariable(value="id") int id){
-		Post post = postDao.getPostById(id);
+	@GetMapping("/post/{email}")
+	public ResponseEntity<Post> getPost(@PathVariable(value="email") String email){
+		Post post = postDao.getPostByEmail(email);
 		if(post == null) {
 			return ResponseEntity.notFound().build();
 		}
@@ -57,9 +57,9 @@ public class PostController {
 	}
 	
 	//게시글 수정
-	@PutMapping("/post/{id}")
-	public ResponseEntity<Void> updatePost(@PathVariable(value="id") int id, @Valid @RequestBody Post post){
-		 boolean result = postDao.updatePost(id, post);
+	@PutMapping("/post/{email}")
+	public ResponseEntity<Void> updatePost(@PathVariable(value="email") String email, @Valid @RequestBody Post post){
+		 boolean result = postDao.updatePost(email, post);
 		  if(result) {
 			  return ResponseEntity.noContent().build();
 		  }else {
@@ -68,9 +68,9 @@ public class PostController {
 	}
 	
 	//게시글 삭제
-	@DeleteMapping("/post/{id}")
-	public ResponseEntity<Void> deleteUser(@PathVariable(value="id") int id){
-		boolean result = postDao.deletePost(id);
+	@DeleteMapping("/post/{email}")
+	public ResponseEntity<Void> deleteUser(@PathVariable(value="email") String email){
+		boolean result = postDao.deletePost(email);
 		if(result) {
 			return ResponseEntity.noContent().build();
 		} else {
