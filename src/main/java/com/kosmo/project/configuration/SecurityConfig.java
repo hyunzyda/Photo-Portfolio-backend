@@ -12,8 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.kosmo.project.UserService;
 import com.kosmo.project.dao.UserDAO;
+import com.kosmo.project.service.UserService;
 import com.kosmo.project.util.JwtUtil;
 
 import lombok.RequiredArgsConstructor;

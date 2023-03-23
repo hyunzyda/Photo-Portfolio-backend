@@ -37,16 +37,16 @@ public class UserDAO {
     }
 
     // 사용자 정보 수정
-    public boolean updateUser(int id, User user) {
-        String sql = "UPDATE user SET email = ?, password = ?, nickname = ?, phone = ? WHERE user_id = ?";
-        int count = jdbcTemplate.update(sql, user.getEmail(), user.getPassword(), user.getNickname(), user.getPhone(), id);
+    public boolean updateUser(User user) {
+        String sql = "UPDATE user SET email = ?, password = ?, nickname = ?, phone = ? WHERE email = ?";
+        int count = jdbcTemplate.update(user.getEmail(), user.getPassword(), user.getNickname(), user.getPhone());
         return count > 0;
     }
 
     // 사용자 정보 삭제
-    public boolean deleteUser(int id) {
-        String sql = "DELETE FROM user WHERE user_id = ?";
-        int count = jdbcTemplate.update(sql, id);
+    public boolean deleteUser(String email) {
+        String sql = "DELETE FROM user WHERE email = ?";
+        int count = jdbcTemplate.update(sql, email);
         return count > 0;
     }
     
@@ -54,7 +54,6 @@ public class UserDAO {
         @Override
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
             User user = new User();
-            user.setUserid(rs.getInt("user_id"));
             user.setEmail(rs.getString("email"));
             user.setPassword(rs.getString("password"));
             user.setNickname(rs.getString("nickname"));

@@ -64,9 +64,9 @@ public class UserController {
     
 
     // 사용자 정보 수정
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> updateUser(@PathVariable(value = "id") int id,@Valid @RequestBody User user) {
-        boolean result = userDao.updateUser(id, user);
+    @PutMapping("/update")
+    public ResponseEntity<Void> updateUser(@Valid @RequestBody User user) {
+        boolean result = userDao.updateUser(user);
         if(result) {
             return ResponseEntity.noContent().build();
         } else {
@@ -75,9 +75,9 @@ public class UserController {
     }
 
     // 사용자 정보 삭제
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable(value = "id") int id) {
-        boolean result = userDao.deleteUser(id);
+    @DeleteMapping("/{email}")
+    public ResponseEntity<Void> deleteUser(@PathVariable(value = "email") String email) {
+        boolean result = userDao.deleteUser(email);
         if(result) {
             return ResponseEntity.noContent().build();
         } else {
