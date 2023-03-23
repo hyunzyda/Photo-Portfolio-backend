@@ -3,11 +3,13 @@ package com.kosmo.project.util;
 import java.util.Date;
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+@Service
 public class JwtUtil {
 	public static boolean isExpired(String token,String secretKey) {
 		return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)

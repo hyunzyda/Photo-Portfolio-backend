@@ -50,11 +50,11 @@ public class AuthController {
         
         if (count == 1) {
             // JWT 토큰 생성
-            String token = authDAO.login(email, password);
-//            HttpHeaders headers = new HttpHeaders();
-//            headers.setBearerAuth(token); // 토큰을 헤더에 담아서 전달
-//            return ResponseEntity.ok().headers(headers).build();
-            return ResponseEntity.ok().body(token);
+            String token = authDAO.createToken(email);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setBearerAuth(token); // 토큰을 헤더에 담아서 전달
+            return ResponseEntity.ok().headers(headers).build();
+//            return ResponseEntity.ok().body(token);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 에러");
         }
