@@ -1,10 +1,9 @@
 package com.kosmo.project.dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,7 +11,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.kosmo.project.dto.Comment;
-import com.kosmo.project.dto.Post;
 
 @Repository
 public class CommentDAO {
@@ -21,22 +19,27 @@ public class CommentDAO {
 	private JdbcTemplate jdbcTemplate;
 
     // 게시물별 댓글 조회
-    public Comment getCommentById(int id) {
-		
-        String sql = "SELECT * FROM comment WHERE post_id=?";
-
-            return null;
+    public List<Comment> getCommentById(int id) {
+    	String sql = "SELECT * FROM comment WHERE post_id = ?";
+        List<Comment> comments = jdbcTemplate.query(sql, new Object[]{id}, new CommentRowMapper());
+        return comments;
     }
     
     
-    //댓글 추가
-    public boolean addComment(Comment comment) {
+    // 댓글 추가
+    public boolean addComment(String email,int post_id,Comment comment) {
     	String sql = "INSERT INTO comment (email,post_id,content,created_at) VALUES (?,?,?,?)";
-    	int result =  jdbcTemplate.update(sql, comment.getPost_id(), comment.getContent(), comment.getCreated_at());
-    	return result > 0;
-    			
+    	int result =  jdbcTemplate.update(sql,email, post_id, comment.getContent(), LocalDateTime.now());
+    	return result > 0;  			
     }
     
+    // 댓글 삭제
+	public boolean deleteCommentById(int id) {
+        String sql = "DELETE FROM comment WHERE comment_id=?";
+        int result = jdbcTemplate.update(sql, id);
+        return (result > 0);
+	}  
+	
 	private class CommentRowMapper implements RowMapper<Comment>{
 	   @Override
 	   public Comment mapRow(ResultSet rs, int rowNum) throws SQLException{
@@ -50,5 +53,6 @@ public class CommentDAO {
 		   return cm;
 		   
 	   }
-	}   
+	}
+
 }
