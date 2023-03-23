@@ -6,15 +6,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.kosmo.project.dao.UserDAO;
-import com.kosmo.project.service.UserService;
-import com.kosmo.project.util.JwtUtil;
+import com.kosmo.project.dao.AuthDAO;
+
+//import com.kosmo.project.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,7 +22,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig{
 	
-	private final UserService userService;
+//	private final UserService userService;
+	private final AuthDAO authDao;
 	
 	@Value("${jwt.secret}")
 	private String secretKey;
@@ -36,14 +35,14 @@ public class SecurityConfig{
 				.csrf().disable()
 				.cors().and()
 				.authorizeRequests()
-	            .antMatchers(HttpMethod.GET,"/**").permitAll()
-//				.antMatchers("/login","/signup").permitAll()
+				.antMatchers(HttpMethod.GET,"/**").permitAll()
+//				.antMatchers("/login,/signup").permitAll()
 //				.antMatchers(HttpMethod.GET,"/**").authenticated()
 				.and()
 				.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
-				.addFilterBefore(new JwtFilter(userService,secretKey),UsernamePasswordAuthenticationFilter.class)
+				.addFilterBefore(new JwtFilter(authDao,secretKey),UsernamePasswordAuthenticationFilter.class)
 				.build();
 	}
 }

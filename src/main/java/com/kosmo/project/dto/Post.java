@@ -14,7 +14,7 @@ public class Post {
 	private String email;
 	private String content;
 	private String image_url;
-	private int user_id;
+	private int likeCnt;
 	private LocalDateTime created_at;
 	private LocalDateTime modified_at;
 	
