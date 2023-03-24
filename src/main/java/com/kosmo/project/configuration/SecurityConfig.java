@@ -9,10 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import com.kosmo.project.dao.AuthDAO;
-
-//import com.kosmo.project.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig{
 	
-//	private final UserService userService;
 	private final AuthDAO authDao;
 	
 	@Value("${jwt.secret}")
@@ -35,9 +31,8 @@ public class SecurityConfig{
 				.csrf().disable()
 				.cors().and()
 				.authorizeRequests()
-				.antMatchers(HttpMethod.GET,"/**").permitAll()
 //				.antMatchers("/login,/signup").permitAll()
-//				.antMatchers(HttpMethod.GET,"/**").authenticated()
+				.antMatchers(HttpMethod.GET,"/**").authenticated()
 				.and()
 				.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

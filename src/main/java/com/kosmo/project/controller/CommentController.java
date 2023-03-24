@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,8 +26,8 @@ public class CommentController {
 	private CommentDAO commentDao;
 	
 	// 게시물별 댓글 조회
-	@GetMapping("/{id}")
-	public ResponseEntity<List<Comment>> getComment(@PathVariable(value="id") int id){
+	@GetMapping("/{commentId}")
+	public ResponseEntity<List<Comment>> getComment(@PathVariable(value="commentId") int id){
 		List<Comment> comment = commentDao.getCommentById(id);
 		if(comment == null) {
 			return ResponseEntity.notFound().build();
@@ -37,8 +36,8 @@ public class CommentController {
 	}
 	
 	// 댓글 추가
-	@PostMapping("/{id}")
-	public ResponseEntity<Comment> addComment(@PathVariable(value="id") int post_id ,@Valid @RequestBody Comment comment){
+	@PostMapping("/{postId}")
+	public ResponseEntity<Comment> addComment(@PathVariable(value="postId") int post_id ,@Valid @RequestBody Comment comment){
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		boolean result = commentDao.addComment(email,post_id,comment);
 		if(result) {
@@ -49,8 +48,8 @@ public class CommentController {
 	}
 	
 	// 댓글 삭제
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteComment(@PathVariable(value="id") int id) {
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<String> deleteComment(@PathVariable(value="commentId") int id) {
         boolean result = commentDao.deleteCommentById(id);
         if (result) {
             return ResponseEntity.ok().build();

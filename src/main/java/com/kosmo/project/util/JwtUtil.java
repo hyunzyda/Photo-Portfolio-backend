@@ -2,7 +2,6 @@ package com.kosmo.project.util;
 
 import java.util.Date;
 
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
