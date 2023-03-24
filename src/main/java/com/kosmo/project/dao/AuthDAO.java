@@ -24,7 +24,7 @@ public class AuthDAO {
 //	@Autowired
 //	private UserService userService;
     
-	private Long expiredMs = 1000 * 60 * 60l;
+	private Long expiredMs = 1000 * 60 * 60 * 24 * 30l;
     
     public AuthDAO(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);

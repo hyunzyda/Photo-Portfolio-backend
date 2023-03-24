@@ -23,13 +23,13 @@ public class S3Controller {
 	@Autowired
 	private S3Service s3Service;
 	
+	//파일 업로드
 	@PostMapping("/upload")
 	public String upload(@RequestParam("file") MultipartFile file) {
 		return s3Service.saveFile(file);
 	}
 	
-	
-	
+	//파일 다운로드
 	@GetMapping("/download/{filename}")
     public ResponseEntity<byte[]> download(@PathVariable("filename") String filename){
         HttpHeaders headers=new HttpHeaders();
@@ -38,12 +38,14 @@ public class S3Controller {
         byte[] bytes = s3Service.downloadFile(filename);
         return  ResponseEntity.status(HttpStatus.OK).headers(headers).body(bytes);
     }
-	
+    
+	//파일 삭제
 	@DeleteMapping("/{filename}")
 	public String deleteFile(@PathVariable("filename") String filename) {
 		return s3Service.deleteFile(filename);
 	}
 	
+	//전체 파일 불러오기
 	@GetMapping("/allfiles")
 	public List<String> getAllFiles(){
 		return s3Service.listAllFiles();

@@ -29,20 +29,7 @@ public class S3Service implements FileServiceImpl{
 		this.s3 = s3;
 	}
 	
-//	//파일 업로드
-//	@Override
-//	public String saveFile(MultipartFile file) {
-//		String originalFileName = file.getOriginalFilename();
-//		try {
-//			File file1 = convertMultiPartToFile(file);
-//			PutObjectResult putObjectResult = s3.putObject(bucketName, originalFileName, file1);
-//			return putObjectResult.getContentMd5();
-//		}catch(IOException e) {
-//			throw new RuntimeException(e);
-//		}
-//
-//	}
-//	
+	//파일 업로드
 	@Override
     public String saveFile(MultipartFile file) {
         String originalFileName = file.getOriginalFilename();
@@ -50,6 +37,8 @@ public class S3Service implements FileServiceImpl{
         try {
             byte[] bytes = file.getBytes();
             ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(file.getContentType());
+            metadata.setContentDisposition("linear");
             metadata.setContentLength(bytes.length);
             PutObjectRequest request = new PutObjectRequest(bucketName, originalFileName, new ByteArrayInputStream(bytes), metadata);
             PutObjectResult putObjectResult = s3.putObject(request);
@@ -85,14 +74,5 @@ public class S3Service implements FileServiceImpl{
 		ListObjectsV2Result listObjectsV2Result =s3.listObjectsV2(bucketName);
 		return listObjectsV2Result.getObjectSummaries().stream().map(S3ObjectSummary::getKey).collect(Collectors.toList());
 	}
-	
-//	private File convertMultiPartToFile(MultipartFile file) throws IOException
-//	{
-//		File convFile = new File(file.getOriginalFilename());
-//		FileOutputStream fos = new FileOutputStream(convFile);
-//		fos.write(file.getBytes());
-//		fos.close();
-//		return convFile;
-//	}
 	
 }
