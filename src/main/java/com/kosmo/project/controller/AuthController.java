@@ -3,8 +3,6 @@ package com.kosmo.project.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +13,6 @@ import com.kosmo.project.dao.AuthDAO;
 import com.kosmo.project.dto.LoginRequest;
 import com.kosmo.project.dto.SignupRequest;
 import com.kosmo.project.dto.User;
-import com.kosmo.project.util.JwtUtil;
 
 @RestController
 public class AuthController {
@@ -51,10 +48,10 @@ public class AuthController {
         if (count == 1) {
             // JWT 토큰 생성
             String token = authDAO.createToken(email);
-            HttpHeaders headers = new HttpHeaders();
-            headers.setBearerAuth(token); // 토큰을 헤더에 담아서 전달
-            return ResponseEntity.ok().headers(headers).build();
-//            return ResponseEntity.ok().body(token);
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setBearerAuth(token); // 토큰을 헤더에 담아서 전달
+//            return ResponseEntity.ok().headers(headers).build();
+            return ResponseEntity.ok().body(token);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 에러");
         }

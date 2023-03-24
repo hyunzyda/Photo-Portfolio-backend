@@ -21,8 +21,6 @@ public class AuthDAO {
 	private String secretKey;
 	@Autowired
     private JdbcTemplate jdbcTemplate;
-//	@Autowired
-//	private UserService userService;
     
 	private Long expiredMs = 1000 * 60 * 60l;
     
@@ -55,10 +53,6 @@ public class AuthDAO {
         int count = jdbcTemplate.queryForObject(sql, Integer.class, email, password);
         return count;
     }
-
-//	public String createToken(String email,String password) {
-//		return userService.login(email, password, expiredMs);
-//	}
 	
 	public String createToken(String email) {
 		return JwtUtil.createJwt(email, secretKey, expiredMs);

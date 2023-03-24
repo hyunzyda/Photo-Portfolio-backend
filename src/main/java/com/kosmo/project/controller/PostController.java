@@ -86,5 +86,16 @@ public class PostController {
 	}
 	
 	// 게시글별 좋아요수 증가
-	
+	@PostMapping("/like/{id}")
+	public ResponseEntity<Void> likePost(@PathVariable(value="id") int postId){
+		String email = SecurityContextHolder.getContext().getAuthentication().getName();
+		boolean result = postDao.checkLike(postId,email);
+		if(result) {
+			postDao.increaseLike(postId, email);
+			return ResponseEntity.ok().build();
+		}else {
+			postDao.decreaseLike(postId, email);
+			return ResponseEntity.ok().build();
+		}
+	}	
 }

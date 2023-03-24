@@ -52,7 +52,7 @@ public class PostDAO {
 		   return count > 0;
 	   }
 	   
-	   // 게시글 좋아요수 관리
+	   
 	   
 	   private class PostRowMapper implements RowMapper<Post>{
 		   @Override
@@ -62,13 +62,34 @@ public class PostDAO {
 			   post.setEmail(rs.getString("email"));
 			   post.setContent(rs.getString("content"));
 			   post.setImage_url(rs.getString("image_url"));
-			   post.setLikeCnt(rs.getInt("likeCnt"));
+			   post.setLikeCnt(rs.getInt("like_count"));
 			   post.setCreated_at(rs.getTimestamp("created_at").toLocalDateTime());
 			   post.setModified_at(rs.getTimestamp("modified_at").toLocalDateTime());
 			   return post;
 			   
 		   }
 	   }
-	    
-	   
+
+	// 이전에 게시글 좋아요 클릭여부 확인
+	public boolean checkLike(int postId, String email) {
+		String sql = "SELECT COUNT(*) FROM post_like WHERE post_id = ? AND email = ?";
+		int count = jdbcTemplate.queryForObject(sql, Integer.class,postId,email);
+		return count > 0;
+	}
+	
+	// 게시글 좋아요수 증가
+	public void increaseLike(int postId, String email) {
+		String sql1 = "UPDATE post SET like_count = like_count - 1 WHERE post_id = ?";
+        jdbcTemplate.update(sql1, postId);
+        String sql = "DELETE FROM post_like WHERE post_id = ? AND email = ?";
+        jdbcTemplate.update(sql, postId, email);
+	}
+	
+	// 게시글 좋아요수 감소
+	public void decreaseLike(int postId, String email) {        
+        String sql1 = "UPDATE post SET like_count = like_count + 1 WHERE post_id = ?";
+        jdbcTemplate.update(sql1, postId);
+        String sql2 = "INSERT INTO post_like (post_id, email) VALUES (?, ?)";
+        jdbcTemplate.update(sql2, postId, email);	
+	}		   
 }
