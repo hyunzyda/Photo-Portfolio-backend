@@ -25,7 +25,7 @@ public class S3Controller {
    private S3Service s3Service;
    
    // 파일 업로드
-   @PostMapping("/upload/{file}")
+   @PostMapping("/upload")
    public String upload(@RequestParam("file") MultipartFile file) {
       return s3Service.saveFile(file);
    }

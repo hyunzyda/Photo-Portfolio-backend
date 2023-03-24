@@ -4,13 +4,16 @@ import java.io.ByteArrayInputStream;
 //import java.io.File;
 //import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
@@ -31,36 +34,24 @@ public class S3Service implements FileServiceImpl{
 	
 	//파일 업로드
 	@Override
-    public String saveFile(MultipartFile file) {
-        try {
-            String fileName = generateFileName(file);
-            ObjectMetadata metadata = new ObjectMetadata();
-            metadata.setContentType(file.getContentType());
-            metadata.setContentLength(file.getSize());
-            s3.putObject(new PutObjectRequest(bucketName, fileName, file.getInputStream(), metadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
-            return s3.getUrl(bucketName, fileName).toExternalForm();
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to upload image to S3", e);
-        }
-    }	
-	private String generateFileName(MultipartFile file) {
-        return System.currentTimeMillis() + "_" + file.getOriginalFilename();
-    }
-	
-//    String originalFileName = file.getOriginalFilename();
-//
-//    try {
-//        byte[] bytes = file.getBytes();
-//        ObjectMetadata metadata = new ObjectMetadata();
-//        
-//        metadata.setContentLength(bytes.length);
-//        PutObjectRequest request = new PutObjectRequest(bucketName, originalFileName, new ByteArrayInputStream(bytes), metadata);
-//        PutObjectResult putObjectResult = s3.putObject(request);
-//        return putObjectResult.getContentMd5();
-//    } catch (IOException e) {
-//        throw new RuntimeException(e);
-//    }
+	public String saveFile(MultipartFile file) {
+	    String originalFileName = file.getOriginalFilename();
+	    try {
+	        InputStream inputStream = file.getInputStream();
+	        byte[] bytes = IOUtils.toByteArray(inputStream);
+	        ObjectMetadata metadata = new ObjectMetadata();
+	        metadata.setContentLength(bytes.length);
+	        metadata.setContentType(file.getContentType());
+	        PutObjectRequest request = new PutObjectRequest(bucketName, originalFileName, new ByteArrayInputStream(bytes), metadata);
+	        PutObjectResult putObjectResult = s3.putObject(request);
+	        String url = s3.getUrl(bucketName, originalFileName).toString();
+	        // 임시 저장소에 저장된 파일 삭제
+	        file.getInputStream().close();
+	        return url;
+	    } catch (IOException e) {
+	        throw new RuntimeException(e);
+	    }
+	}
 	
 	//파일 다운로드
 	@Override
