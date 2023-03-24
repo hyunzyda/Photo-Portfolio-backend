@@ -25,8 +25,8 @@ public class PostDAO {
 	   
 	   // 게시글 추가
 	   public boolean addPost(String email,Post post) {
-		   String sql = "INSERT INTO post (email, content, image_url, created_at) VALUES(?,?,?,?)";
-		   int count = jdbcTemplate.update(sql, email, post.getContent(), post.getImage_url(), LocalDateTime.now());
+		   String sql = "INSERT INTO post (email, image_url, content, created_at) VALUES(?,?,?,?)";
+		   int count = jdbcTemplate.update(sql, email, post.getImage_url(), post.getContent(), LocalDateTime.now());
 		   return count > 0;
 	   }
 	   
