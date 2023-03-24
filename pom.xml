@@ -100,8 +100,12 @@
 		    <artifactId>aws-java-sdk</artifactId>
 		    <version>1.12.430</version>
 		</dependency>
-		
-	</dependencies>
+		<dependency>
+  			<groupId>com.amazonaws</groupId>
+  			<artifactId>aws-java-sdk-s3</artifactId>
+ 			<version>1.12.430</version>
+		</dependency>
+		</dependencies>
 
 	<build>
 		<plugins>

@@ -1,7 +1,8 @@
 package com.kosmo.project.service;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.ByteArrayInputStream;
+//import java.io.File;
+//import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,19 +29,35 @@ public class S3Service implements FileServiceImpl{
 		this.s3 = s3;
 	}
 	
-	//파일 업로드
+//	//파일 업로드
+//	@Override
+//	public String saveFile(MultipartFile file) {
+//		String originalFileName = file.getOriginalFilename();
+//		try {
+//			File file1 = convertMultiPartToFile(file);
+//			PutObjectResult putObjectResult = s3.putObject(bucketName, originalFileName, file1);
+//			return putObjectResult.getContentMd5();
+//		}catch(IOException e) {
+//			throw new RuntimeException(e);
+//		}
+//
+//	}
+//	
 	@Override
-	public String saveFile(MultipartFile file) {
-		String originalFileName = file.getOriginalFilename();
-		try {
-			File file1 = convertMultiPartToFile(file);
-			PutObjectResult putObjectResult = s3.putObject(bucketName, originalFileName, file1);
-			return putObjectResult.getContentMd5();
-		}catch(IOException e) {
-			throw new RuntimeException(e);
-		}
+    public String saveFile(MultipartFile file) {
+        String originalFileName = file.getOriginalFilename();
 
-	}
+        try {
+            byte[] bytes = file.getBytes();
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentLength(bytes.length);
+            PutObjectRequest request = new PutObjectRequest(bucketName, originalFileName, new ByteArrayInputStream(bytes), metadata);
+            PutObjectResult putObjectResult = s3.putObject(request);
+            return putObjectResult.getContentMd5();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 	
 	
 	//파일 다운로드
@@ -69,13 +86,13 @@ public class S3Service implements FileServiceImpl{
 		return listObjectsV2Result.getObjectSummaries().stream().map(S3ObjectSummary::getKey).collect(Collectors.toList());
 	}
 	
-	private File convertMultiPartToFile(MultipartFile file) throws IOException
-	{
-		File convFile = new File(file.getOriginalFilename());
-		FileOutputStream fos = new FileOutputStream(convFile);
-		fos.write(file.getBytes());
-		fos.close();
-		return convFile;
-	}
+//	private File convertMultiPartToFile(MultipartFile file) throws IOException
+//	{
+//		File convFile = new File(file.getOriginalFilename());
+//		FileOutputStream fos = new FileOutputStream(convFile);
+//		fos.write(file.getBytes());
+//		fos.close();
+//		return convFile;
+//	}
 	
 }
