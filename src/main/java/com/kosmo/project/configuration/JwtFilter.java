@@ -15,23 +15,25 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.kosmo.project.service.UserService;
+import com.kosmo.project.dao.AuthDAO;
+//import com.kosmo.project.service.UserService;
 import com.kosmo.project.util.JwtUtil;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter{
 
-	private final UserService userService;
 	private final String secretKey;
 	
-	public JwtFilter(UserService userService, String secretKey) {
-		this.userService=userService;
+	private final AuthDAO authDao;
+	
+	public JwtFilter jwtFilter() {
+		return new JwtFilter(authDao, secretKey);
+	}
+	
+	public JwtFilter(AuthDAO authDao, String secretKey) {
+		this.authDao=authDao;
 		this.secretKey=secretKey;
 	}
 	

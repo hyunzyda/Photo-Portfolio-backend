@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.kosmo.project.dto.User;
+//import com.kosmo.project.service.UserService;
 import com.kosmo.project.util.JwtUtil;
 
 @Repository
@@ -20,6 +21,8 @@ public class AuthDAO {
 	private String secretKey;
 	@Autowired
     private JdbcTemplate jdbcTemplate;
+    
+	private Long expiredMs = 1000 * 60 * 60 * 24 * 30l;
     
     public AuthDAO(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -50,10 +53,8 @@ public class AuthDAO {
         int count = jdbcTemplate.queryForObject(sql, Integer.class, email, password);
         return count;
     }
-    
-	private Long expiredMs = 1000 * 60 * 60l;
-	public String login(String email,String password) {
+	
+	public String createToken(String email) {
 		return JwtUtil.createJwt(email, secretKey, expiredMs);
 	}
-    
 }
