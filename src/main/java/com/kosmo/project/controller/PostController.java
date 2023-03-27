@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,6 +45,8 @@ public class PostController {
 		}
 	}
 	
+
+	
 	//게시글 추가
 	@PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Void> addPost(@Valid @ModelAttribute Post post, @RequestParam(value="file", required = false) MultipartFile file) {
@@ -68,6 +69,7 @@ public class PostController {
 	@GetMapping("/{email}")
 	public ResponseEntity<List<Post>> getPost(@PathVariable(value="email") String email){
 		List<Post> post = postDao.getPostByEmail(email);
+		postDao.saveUserVisit(email);
 		if(post == null) {
 			return ResponseEntity.notFound().build();
 		}
@@ -99,15 +101,15 @@ public class PostController {
 	
 	// 게시글별 좋아요수 증가
 	@PostMapping("/like/{postId}")
-	public ResponseEntity<Void> likePost(@PathVariable(value="postId") int postId){
+	public ResponseEntity<Boolean> likePost(@PathVariable(value="postId") int postId){
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		boolean result = postDao.checkLike(postId,email);
 		if(result) {
-			postDao.increaseLike(postId, email);
-			return ResponseEntity.ok().build();
+			boolean status = postDao.decreaseLike(postId, email);
+			return ResponseEntity.ok().body(status);
 		}else {
-			postDao.decreaseLike(postId, email);
-			return ResponseEntity.ok().build();
+			boolean status = postDao.increaseLike(postId, email);
+			return ResponseEntity.ok().body(status);
 		}
 	}	
 }

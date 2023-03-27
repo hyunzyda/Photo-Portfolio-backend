@@ -6,13 +6,11 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,10 +18,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kosmo.project.dao.UserDAO;
 import com.kosmo.project.dto.User;
+import com.kosmo.project.service.S3Service;
 
 @RestController
 @RequestMapping("/user")
@@ -31,9 +32,11 @@ public class UserController {
 
     @Autowired
     private UserDAO userDao;
+    @Autowired
+	private S3Service s3Service;
     
     // 모든 사용자 정보 조회
-    @GetMapping("")
+    @GetMapping("/all")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userDao.getAllUsers();
         if(users.size() > 0) {
@@ -41,7 +44,7 @@ public class UserController {
         } else {
             return ResponseEntity.notFound().build();
         }
-    }   
+    }    
     
     // 사용자 정보 추가    
     @PostMapping("/add")
@@ -54,9 +57,21 @@ public class UserController {
         }
     }    
     
+    // 사용자 프로필사진 변경
+    @PostMapping(value="/editProfile" ,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> editProfile(@RequestParam(value="file", required = false) MultipartFile file){
+    	String email = SecurityContextHolder.getContext().getAuthentication().getName();
+    	String fileUrl = s3Service.saveFile(file);    	
+    	boolean result = userDao.editProfile(fileUrl,email);
+    	if(result) {
+			return ResponseEntity.status(HttpStatus.CREATED).build();
+		}else {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}	
+    }
+    
     // 내 정보 조회
     @GetMapping("/me")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<User> getUserInfo(Authentication authentication){
         User user = userDao.getUserByEmail(authentication.getName());
         return ResponseEntity.ok(user);
@@ -66,7 +81,8 @@ public class UserController {
     // 사용자 정보 수정
     @PutMapping("/update")
     public ResponseEntity<Void> updateUser(@Valid @RequestBody User user) {
-        boolean result = userDao.updateUser(user);
+    	String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean result = userDao.updateUser(user,email);
         if(result) {
             return ResponseEntity.noContent().build();
         } else {

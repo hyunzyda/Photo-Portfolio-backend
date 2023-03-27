@@ -52,7 +52,6 @@ public class JwtFilter extends OncePerRequestFilter{
 		
 		// Token꺼내기
 		String token = authorization.split(" ")[1];
-
 		
 		// Token Expired여부 확인
 		if(JwtUtil.isExpired(token, secretKey)) {
@@ -60,7 +59,6 @@ public class JwtFilter extends OncePerRequestFilter{
 			filterChain.doFilter(request, response);
 			return;
 		}
-		
 		
 		// Token에서 email 꺼내기
 		String email = JwtUtil.getEmailFromToken(token, secretKey);

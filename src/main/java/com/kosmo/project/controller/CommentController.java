@@ -26,8 +26,8 @@ public class CommentController {
 	private CommentDAO commentDao;
 	
 	// 게시물별 댓글 조회
-	@GetMapping("/{commentId}")
-	public ResponseEntity<List<Comment>> getComment(@PathVariable(value="commentId") int id){
+	@GetMapping("/{postId}")
+	public ResponseEntity<List<Comment>> getComment(@PathVariable(value="postId") int id){
 		List<Comment> comment = commentDao.getCommentById(id);
 		if(comment == null) {
 			return ResponseEntity.notFound().build();

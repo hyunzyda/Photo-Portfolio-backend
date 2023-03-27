@@ -35,11 +35,18 @@ public class UserDAO {
         String sql = "SELECT * FROM user WHERE email=?";
         return jdbcTemplate.queryForObject(sql, new Object[] { email }, new UserRowMapper());
     }
+    
+    // 사용자 프로필사진 변경
+    public boolean editProfile(String fileUrl,String email) {
+    	String sql = "UPDATE user SET profile_image = ? WHERE email = ?";
+    	int count = jdbcTemplate.update(sql,fileUrl,email);
+    	return count > 0;
+    }
 
     // 사용자 정보 수정
-    public boolean updateUser(User user) {
+    public boolean updateUser(User user,String email) {
         String sql = "UPDATE user SET email = ?, password = ?, nickname = ?, phone = ? WHERE email = ?";
-        int count = jdbcTemplate.update(user.getEmail(), user.getPassword(), user.getNickname(), user.getPhone());
+        int count = jdbcTemplate.update(sql,user.getEmail(), user.getPassword(), user.getNickname(), user.getPhone(),email);
         return count > 0;
     }
 
@@ -67,6 +74,7 @@ public class UserDAO {
             user.setIntroduce(rs.getString("introduce"));
             user.setProImage(rs.getString("profile_image"));
             user.setRole(rs.getString("role"));
+            user.setVisitCnt(rs.getInt("visit_count"));
             return user;
         }
     }    

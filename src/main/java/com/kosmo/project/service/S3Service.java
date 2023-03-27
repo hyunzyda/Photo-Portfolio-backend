@@ -23,8 +23,8 @@ import com.amazonaws.util.IOUtils;
 @Service
 public class S3Service implements FileServiceImpl{
 
-	@Value("${bucketName}")
-	private String bucketName;	
+	@Value("${BName}")
+	private String BName;	
 	
 	private final AmazonS3 s3;	
 	
@@ -42,9 +42,9 @@ public class S3Service implements FileServiceImpl{
 	        ObjectMetadata metadata = new ObjectMetadata();
 	        metadata.setContentLength(bytes.length);
 	        metadata.setContentType(file.getContentType());
-	        PutObjectRequest request = new PutObjectRequest(bucketName, originalFileName, new ByteArrayInputStream(bytes), metadata);
+	        PutObjectRequest request = new PutObjectRequest(BName, originalFileName, new ByteArrayInputStream(bytes), metadata);
 	        PutObjectResult putObjectResult = s3.putObject(request);
-	        String url = s3.getUrl(bucketName, originalFileName).toString();
+	        String url = s3.getUrl(BName, originalFileName).toString();
 	        // 임시 저장소에 저장된 파일 삭제
 	        file.getInputStream().close();
 	        return url;
@@ -55,7 +55,7 @@ public class S3Service implements FileServiceImpl{
 	//파일 다운로드
 	@Override
 	public byte[] downloadFile(String filename) {
-		S3Object object = s3.getObject(bucketName, filename);
+		S3Object object = s3.getObject(BName, filename);
 		S3ObjectInputStream objectContent = object.getObjectContent();
 		try {
 			return IOUtils.toByteArray(objectContent);
