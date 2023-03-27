@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter @Setter
 @AllArgsConstructor
 public class PostLike {
-	private int userLikeId;
+	private int postLikeId;
 	private String email;
 	private int postId;
 	

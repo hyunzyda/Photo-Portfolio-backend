@@ -34,7 +34,7 @@ public class PostDAO {
 	   @SuppressWarnings("deprecation")
 	   public List<Post> getPostByEmail(String email) {
 		    String sql = "SELECT * FROM post WHERE email = ?";
-		    List<Post> post = jdbcTemplate.query(sql, new Object[] { email }, new PostRowMapper());
+		    List<Post> post = jdbcTemplate.query(sql, new Object[] {email}, new PostRowMapper());
 		    return post;
 		}
 	   
@@ -59,23 +59,22 @@ public class PostDAO {
 		   return count > 0;
 	   }
 		
-	   // 게시글 좋아요수 증가
-	   public boolean increaseLike(int postId, String email) {
+	   // 게시글 좋아요수 감소
+	   public boolean decreaseLike(int postId, String email) {
 		   String sql1 = "UPDATE post SET like_count = like_count - 1 WHERE post_id = ?";
 		   jdbcTemplate.update(sql1, postId);
 		   String sql = "DELETE FROM post_like WHERE post_id = ? AND email = ?";
 		   jdbcTemplate.update(sql, postId, email);
-		   return true;
-		   
+		   return false;
 	   }
 		
-	   // 게시글 좋아요수 감소
-	   public boolean decreaseLike(int postId, String email) {        
+	   // 게시글 좋아요수 증가
+	   public boolean increaseLike(int postId, String email) {        
 		   String sql1 = "UPDATE post SET like_count = like_count + 1 WHERE post_id = ?";
 		   jdbcTemplate.update(sql1, postId);
 		   String sql2 = "INSERT INTO post_like (post_id, email) VALUES (?, ?)";
-		   jdbcTemplate.update(sql2, postId, email);	
-		   return false;
+		   jdbcTemplate.update(sql2, postId, email);
+		   return true;
 	   }		   
 		
 	   // 사용자 방문 기록 저장

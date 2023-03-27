@@ -45,6 +45,8 @@ public class PostController {
 		}
 	}
 	
+
+	
 	//게시글 추가
 	@PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Void> addPost(@Valid @ModelAttribute Post post, @RequestParam(value="file", required = false) MultipartFile file) {
@@ -103,10 +105,10 @@ public class PostController {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		boolean result = postDao.checkLike(postId,email);
 		if(result) {
-			boolean status = postDao.increaseLike(postId, email);
+			boolean status = postDao.decreaseLike(postId, email);
 			return ResponseEntity.ok().body(status);
 		}else {
-			boolean status = postDao.decreaseLike(postId, email);
+			boolean status = postDao.increaseLike(postId, email);
 			return ResponseEntity.ok().body(status);
 		}
 	}	

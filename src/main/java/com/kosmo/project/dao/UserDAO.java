@@ -35,6 +35,13 @@ public class UserDAO {
         String sql = "SELECT * FROM user WHERE email=?";
         return jdbcTemplate.queryForObject(sql, new Object[] { email }, new UserRowMapper());
     }
+    
+    // 사용자 프로필사진 변경
+    public boolean editProfile(String fileUrl,String email) {
+    	String sql = "UPDATE user SET profile_image = ? WHERE email = ?";
+    	int count = jdbcTemplate.update(sql,fileUrl,email);
+    	return count > 0;
+    }
 
     // 사용자 정보 수정
     public boolean updateUser(User user,String email) {
