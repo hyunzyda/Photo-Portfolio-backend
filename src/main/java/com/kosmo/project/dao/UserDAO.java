@@ -37,9 +37,9 @@ public class UserDAO {
     }
 
     // 사용자 정보 수정
-    public boolean updateUser(User user) {
+    public boolean updateUser(User user,String email) {
         String sql = "UPDATE user SET email = ?, password = ?, nickname = ?, phone = ? WHERE email = ?";
-        int count = jdbcTemplate.update(user.getEmail(), user.getPassword(), user.getNickname(), user.getPhone());
+        int count = jdbcTemplate.update(sql,user.getEmail(), user.getPassword(), user.getNickname(), user.getPhone(),email);
         return count > 0;
     }
 
@@ -67,6 +67,7 @@ public class UserDAO {
             user.setIntroduce(rs.getString("introduce"));
             user.setProImage(rs.getString("profile_image"));
             user.setRole(rs.getString("role"));
+            user.setVisitCnt(rs.getInt("visit_count"));
             return user;
         }
     }    

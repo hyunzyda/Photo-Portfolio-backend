@@ -8,11 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,7 +30,7 @@ public class UserController {
     private UserDAO userDao;
     
     // 모든 사용자 정보 조회
-    @GetMapping("")
+    @GetMapping("/all")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userDao.getAllUsers();
         if(users.size() > 0) {
@@ -41,7 +38,7 @@ public class UserController {
         } else {
             return ResponseEntity.notFound().build();
         }
-    }   
+    }    
     
     // 사용자 정보 추가    
     @PostMapping("/add")
@@ -66,7 +63,8 @@ public class UserController {
     // 사용자 정보 수정
     @PutMapping("/update")
     public ResponseEntity<Void> updateUser(@Valid @RequestBody User user) {
-        boolean result = userDao.updateUser(user);
+    	String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean result = userDao.updateUser(user,email);
         if(result) {
             return ResponseEntity.noContent().build();
         } else {

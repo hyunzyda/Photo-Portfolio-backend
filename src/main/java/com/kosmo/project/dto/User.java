@@ -20,6 +20,7 @@ public class User {
     private String introduce;
     private String proImage;
     private String role;
+    private int visitCnt;
 
     public User() {
     }

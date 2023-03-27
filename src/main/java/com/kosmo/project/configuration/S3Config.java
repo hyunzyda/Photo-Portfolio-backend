@@ -13,18 +13,18 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 @Configuration
 public class S3Config {
 
-    @Value("${accessKey}")
-    private String accessKey;
+    @Value("${AKey}")
+    private String AKey;
 
-    @Value("${secretKey}")
-    private String secretKey;
+    @Value("${SKey}")
+    private String SKey;
 
     @Value("${region}")
     private String region;
 
     @Bean
     public AmazonS3 s3() {
-        AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
+        AWSCredentials awsCredentials = new BasicAWSCredentials(AKey, SKey);
         return AmazonS3ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                 .withRegion(region)
