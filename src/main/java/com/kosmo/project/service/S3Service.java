@@ -51,8 +51,7 @@ public class S3Service implements FileServiceImpl{
 	    } catch (IOException e) {
 	        throw new RuntimeException(e);
 	    }
-	}
-	
+	}	
 	//파일 다운로드
 	@Override
 	public byte[] downloadFile(String filename) {
