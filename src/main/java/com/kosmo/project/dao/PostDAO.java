@@ -25,16 +25,24 @@ public class PostDAO {
 	   
 	   // 게시글 추가
 	   public boolean addPost(String email,Post post) {
-		   String sql = "INSERT INTO post (email, image_url, content, created_at) VALUES(?,?,?,?)";
-		   int count = jdbcTemplate.update(sql, email, post.getImage_url(), post.getContent(), LocalDateTime.now());
+		   String sql = "INSERT INTO post (email, image_url, content, category, created_at) VALUES(?,?,?,?,?)";
+		   int count = jdbcTemplate.update(sql, email, post.getImage_url(), post.getContent(), post.getCategory(), LocalDateTime.now());
 		   return count > 0;
 	   }
 	   
-	   // 게시글 조회
+	   // 이메일별 게시글 조회
 	   @SuppressWarnings("deprecation")
 	   public List<Post> getPostByEmail(String email) {
 		    String sql = "SELECT * FROM post WHERE email = ?";
 		    List<Post> post = jdbcTemplate.query(sql, new Object[] {email}, new PostRowMapper());
+		    return post;
+		}
+	   
+	   // 사진별 게시글 조회
+	   @SuppressWarnings("deprecation")
+	   public List<Post> getPostByImage(String imageUrl) {
+		    String sql = "SELECT * FROM post WHERE image_url = ?";
+		    List<Post> post = jdbcTemplate.query(sql, new Object[] {imageUrl}, new PostRowMapper());
 		    return post;
 		}
 	   
@@ -91,6 +99,7 @@ public class PostDAO {
 			   post.setEmail(rs.getString("email"));
 			   post.setContent(rs.getString("content"));
 			   post.setImage_url(rs.getString("image_url"));
+			   post.setCategory(rs.getString("category"));
 			   post.setLikeCnt(rs.getInt("like_count"));
 			   post.setCreated_at(rs.getTimestamp("created_at").toLocalDateTime());
 			   post.setModified_at(rs.getTimestamp("modified_at").toLocalDateTime());

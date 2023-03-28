@@ -49,7 +49,7 @@ public class PostController {
 	
 	//게시글 추가
 	@PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<Void> addPost(@Valid @ModelAttribute Post post, @RequestParam(value="file", required = false) MultipartFile file) {
+	public ResponseEntity<Void> addPost(@Valid @ModelAttribute Post post,@RequestParam(value="file", required = false) MultipartFile file) {
 		// 이런식으로 토큰payload로 정의되어있는 email을 꺼내서 쓸수있다
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		String fileUrl = null;
@@ -67,9 +67,20 @@ public class PostController {
 	
 	// 사용자별 게시글 조회
 	@GetMapping("/{email}")
-	public ResponseEntity<List<Post>> getPost(@PathVariable(value="email") String email){
+	public ResponseEntity<List<Post>> getPostEmail(@PathVariable(value="email") String email){
 		List<Post> post = postDao.getPostByEmail(email);
 		postDao.saveUserVisit(email);
+		if(post == null) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok().body(post);
+	}
+	
+	// 사진별 게시글 조회
+	@GetMapping("/{imageUrl}")
+	public ResponseEntity<List<Post>> getPostImage(@PathVariable(value="imageUrl") String imageUrl){
+		List<Post> post = postDao.getPostByImage(imageUrl);
+		postDao.saveUserVisit(imageUrl);
 		if(post == null) {
 			return ResponseEntity.notFound().build();
 		}
