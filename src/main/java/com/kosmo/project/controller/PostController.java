@@ -66,7 +66,7 @@ public class PostController {
 	}
 	
 	// 사용자별 게시글 조회
-	@GetMapping("/{email}")
+	@GetMapping("/email/{email}")
 	public ResponseEntity<List<Post>> getPostEmail(@PathVariable(value="email") String email){
 		List<Post> post = postDao.getPostByEmail(email);
 		postDao.saveUserVisit(email);
@@ -77,7 +77,7 @@ public class PostController {
 	}
 	
 	// 사진별 게시글 조회
-	@GetMapping("/{imageUrl}")
+	@GetMapping("/image/{imageUrl}")
 	public ResponseEntity<List<Post>> getPostImage(@PathVariable(value="imageUrl") String imageUrl){
 		List<Post> post = postDao.getPostByImage(imageUrl);
 		postDao.saveUserVisit(imageUrl);
