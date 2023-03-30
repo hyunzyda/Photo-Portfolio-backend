@@ -38,14 +38,6 @@ public class PostDAO {
 		    return post;
 		}
 	   
-	   // 사진별 게시글 조회
-	   @SuppressWarnings("deprecation")
-	   public List<Post> getPostByImage(String imageUrl) {
-		    String sql = "SELECT * FROM post WHERE image_url = ?";
-		    List<Post> post = jdbcTemplate.query(sql, new Object[] {imageUrl}, new PostRowMapper());
-		    return post;
-		}
-	   
 	   // 게시글 수정
 	   public boolean updatePost(int postId, String email, Post post) {
 		   String sql = "UPDATE post SET content = ?, image_url = ?, modified_at =CURRENT_TIMESTAMP  WHERE post_id = ? and email = ? ";

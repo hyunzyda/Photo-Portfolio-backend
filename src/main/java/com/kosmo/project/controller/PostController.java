@@ -76,17 +76,6 @@ public class PostController {
 		return ResponseEntity.ok().body(post);
 	}
 	
-	// 사진별 게시글 조회
-	@GetMapping("/image/{imageUrl}")
-	public ResponseEntity<List<Post>> getPostImage(@PathVariable(value="imageUrl") String imageUrl){
-		List<Post> post = postDao.getPostByImage(imageUrl);
-		postDao.saveUserVisit(imageUrl);
-		if(post == null) {
-			return ResponseEntity.notFound().build();
-		}
-		return ResponseEntity.ok().body(post);
-	}
-	
 	// 게시글 수정
 	@PutMapping("/{postId}")
 	public ResponseEntity<Void> updatePost(@PathVariable(value="postId") int postId, @Valid @RequestBody Post post){

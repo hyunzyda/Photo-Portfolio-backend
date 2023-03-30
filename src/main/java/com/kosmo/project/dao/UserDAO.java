@@ -37,9 +37,9 @@ public class UserDAO {
     }
     
     // 사용자 프로필사진 변경
-    public boolean editProfile(String fileUrl,String email) {
-    	String sql = "UPDATE user SET profile_image = ? WHERE email = ?";
-    	int count = jdbcTemplate.update(sql,fileUrl,email);
+    public boolean editProfile(String fileUrl,String email,User user) {
+    	String sql = "UPDATE user SET profile_image = ?, introduce = ? WHERE email = ?";
+    	int count = jdbcTemplate.update(sql,fileUrl,user.getIntroduce(), email);
     	return count > 0;
     }
 

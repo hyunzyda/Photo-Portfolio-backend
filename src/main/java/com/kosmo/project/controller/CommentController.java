@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kosmo.project.dao.CommentDAO;
 import com.kosmo.project.dto.Comment;
-
 @RestController
 @RequestMapping("/comment")
 public class CommentController {

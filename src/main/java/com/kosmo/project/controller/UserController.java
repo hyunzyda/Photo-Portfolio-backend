@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kosmo.project.dao.UserDAO;
+import com.kosmo.project.dto.Post;
 import com.kosmo.project.dto.User;
 import com.kosmo.project.service.S3Service;
 
@@ -59,10 +61,10 @@ public class UserController {
     
     // 사용자 프로필사진 변경
     @PostMapping(value="/editProfile" ,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> editProfile(@RequestParam(value="file", required = false) MultipartFile file){
+    public ResponseEntity<Void> editProfile(@Valid @ModelAttribute User user,@RequestParam(value="file", required = false) MultipartFile file){
     	String email = SecurityContextHolder.getContext().getAuthentication().getName();
-    	String fileUrl = s3Service.saveFile(file);    	
-    	boolean result = userDao.editProfile(fileUrl,email);
+    	String fileUrl = s3Service.saveFile(file);
+    	boolean result = userDao.editProfile(fileUrl,email,user);
     	if(result) {
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		}else {
