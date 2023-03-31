@@ -34,8 +34,9 @@ public class PostController {
 	@Autowired
 	private S3Service s3Service;
 
-	//모든 게시글 조회
-	@GetMapping("")
+	
+	// 모든 게시글 조회
+	@GetMapping("/all")
 	public ResponseEntity<List<Post>> getAllPosts(){
 		List<Post> posts = postDao.getAllPosts();
 		if(posts.size() > 0 ) {
@@ -45,7 +46,17 @@ public class PostController {
 		}
 	}
 	
-
+	// 모든 게시글 조회(로그인된 사용자 제외)
+	@GetMapping("")	
+	public ResponseEntity<List<Post>> getAllPostsMe(){
+		String email = SecurityContextHolder.getContext().getAuthentication().getName();
+		List<Post> posts = postDao.getAllPostsMe(email);
+		if(posts.size() > 0 ) {
+			return ResponseEntity.ok(posts);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
 	
 	//게시글 추가
 	@PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

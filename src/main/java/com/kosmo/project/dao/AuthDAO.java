@@ -1,14 +1,15 @@
 package com.kosmo.project.dao;
 
-import java.util.Optional;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.kosmo.project.dto.User;
@@ -32,29 +33,37 @@ public class AuthDAO {
         String sql = "INSERT INTO user(email, password, nickname, phone) VALUES (?, ?, ?, ?)";
         return jdbcTemplate.update(sql, user.getEmail(), user.getPassword(), user.getNickname(), user.getPhone());
     }
-
+    
     public boolean existsByUsername(String email) {
         String sql = "SELECT COUNT(*) FROM user WHERE email = ?";
         int count = jdbcTemplate.queryForObject(sql, Integer.class, email);
         return count > 0;
     }
-
-    public Optional<User> findByUsername(String email) {
-        String sql = "SELECT * FROM user WHERE email = ?";
-        try {
-            User user = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), email);
-            return Optional.of(user);
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
-        }
-    }
-    public int loginUser(String email, String password) {
-        String sql = "SELECT COUNT(*) FROM user WHERE email = ? AND password = ?";
-        int count = jdbcTemplate.queryForObject(sql, Integer.class, email, password);
-        return count;
-    }
 	
+	@SuppressWarnings("deprecation")
+	public User getUserByEmail(String email) {
+	    String sql = "SELECT * FROM user WHERE email = ?";
+	    try {
+	        User user = jdbcTemplate.queryForObject(sql, new Object[]{email}, new UserRowMapper());
+	        return user;
+	    } catch (EmptyResultDataAccessException e) {
+	        return null;
+	    }
+	}
+    
 	public String createToken(String email) {
 		return JwtUtil.createJwt(email, secretKey, expiredMs);
 	}
+	
+    private class UserRowMapper implements RowMapper<User> {
+        @Override
+        public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+            User user = new User();
+            user.setEmail(rs.getString("email"));
+            user.setPassword(rs.getString("password"));
+            user.setNickname(rs.getString("nickname"));
+            user.setPhone(rs.getString("phone"));
+            return user;
+        }
+    }
 }

@@ -3,6 +3,7 @@ package com.kosmo.project.dao;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class UserDAO {
 
     // 모든 사용자 정보 조회
     public List<User> getAllUsers() {
-        String sql = "SELECT * FROM user";
+        String sql = "SELECT * FROM user where email != 'admin'";
         return jdbcTemplate.query(sql, new UserRowMapper());
     }
 
@@ -31,15 +32,16 @@ public class UserDAO {
     }
 
     // 사용자 정보 조회
-    public User getUserByEmail(String email) {
+    @SuppressWarnings("deprecation")
+	public User getUserByEmail(String email) {
         String sql = "SELECT * FROM user WHERE email=?";
         return jdbcTemplate.queryForObject(sql, new Object[] { email }, new UserRowMapper());
     }
     
     // 사용자 프로필사진 변경
-    public boolean editProfile(String fileUrl,String email,User user) {
+    public boolean editProfile(String email,User user) {
     	String sql = "UPDATE user SET profile_image = ?, introduce = ? WHERE email = ?";
-    	int count = jdbcTemplate.update(sql,fileUrl,user.getIntroduce(), email);
+    	int count = jdbcTemplate.update(sql,user.getProImage(),user.getIntroduce(), email);
     	return count > 0;
     }
 
@@ -56,7 +58,7 @@ public class UserDAO {
         int count = jdbcTemplate.update(sql, email);
         return count > 0;
     }
-    
+
     private class UserRowMapper implements RowMapper<User> {
         @Override
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {

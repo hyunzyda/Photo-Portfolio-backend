@@ -32,8 +32,8 @@ public class NoticeDAO {
 	
     // 공지사항 수정
     public boolean updateNotice(int noticeId, Notice notice) {
-	    String sql = "UPDATE notice SET content = ?, modified_at =CURRENT_TIMESTAMP  WHERE notice_id = ?";
-	    int count = jdbcTemplate.update(sql, notice.getContent(), noticeId);
+	    String sql = "UPDATE notice SET title =? ,content = ?, modified_at =CURRENT_TIMESTAMP  WHERE notice_id = ?";
+	    int count = jdbcTemplate.update(sql,notice.getTitle(), notice.getContent(), noticeId);
 	    return count > 0;
     }
    

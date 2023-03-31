@@ -1,8 +1,5 @@
 package com.kosmo.project.controller;
 
-
-import java.util.Map;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +26,8 @@ public class AuthController {
                     .badRequest()
                     .body(false);
         }
-
-        User user = new User(signUpRequest.getEmail(), signUpRequest.getPassword(), signUpRequest.getNickname(), signUpRequest.getPhone());
+        
+        User user = new User(signUpRequest.getEmail(),signUpRequest.getPassword(), signUpRequest.getNickname(), signUpRequest.getPhone());
         int result = authDAO.createUser(user);
 
         if (result > 0) {
@@ -45,16 +42,17 @@ public class AuthController {
         String email = request.getEmail();
         String password = request.getPassword();
         
-        // 데이터베이스에서 이메일과 비밀번호 일치 여부 확인
-        int count = authDAO.loginUser(email, password);
+        // DB에서 이메일에 해당하는 사용자 정보(이메일,비밀번호) 가져오기
+        User user = authDAO.getUserByEmail(email);
         
-        if (count == 1) {
+        if (user != null && user.getPassword().equals(password)){
             // JWT 토큰 생성
             String token = authDAO.createToken(email);
-//            HttpHeaders headers = new HttpHeaders();
-//            headers.setBearerAuth(token); // 토큰을 헤더에 담아서 전달
-//            return ResponseEntity.ok().headers(headers).build();
             return ResponseEntity.ok().body(token);
+//          토큰을 헤더에 담아서 전달
+//          HttpHeaders headers = new HttpHeaders();
+//          headers.setBearerAuth(token);
+//          return ResponseEntity.ok().headers(headers).build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 에러");
         }

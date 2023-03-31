@@ -17,17 +17,25 @@ public class PostDAO {
 		@Autowired
 	    private JdbcTemplate jdbcTemplate;
 		
-	   // 모든 게시글 조회
-	   public List<Post> getAllPosts(){
-		   String sql = "SELECT * FROM post";
-		   return jdbcTemplate.query(sql, new PostRowMapper());
-	   }
+		// 모든 게시글 조회
+		public List<Post> getAllPosts(){
+			String sql = "SELECT * FROM post";
+			return jdbcTemplate.query(sql, new PostRowMapper());
+		}		
+		
+		// 모든 게시글 조회(로그인된 사용자 제외)
+		public List<Post> getAllPostsMe(String email){
+		    String sql = "SELECT * FROM post where email <> ?";
+		    return jdbcTemplate.query(sql, new Object[] {email}, new PostRowMapper());
+		}
 	   
 	   // 게시글 추가
 	   public boolean addPost(String email,Post post) {
-		   String sql = "INSERT INTO post (email, image_url, content, category, created_at) VALUES(?,?,?,?,?)";
-		   int count = jdbcTemplate.update(sql, email, post.getImage_url(), post.getContent(), post.getCategory(), LocalDateTime.now());
-		   return count > 0;
+		   String sql1 = "INSERT INTO post (email, image_url, content, category, created_at) VALUES(?,?,?,?,?)";
+		   jdbcTemplate.update(sql1, email, post.getImage_url(), post.getContent(), post.getCategory(), LocalDateTime.now());
+		   String sql2 = "UPDATE user SET post_count = (SELECT COUNT(*) FROM post WHERE email = ?) WHERE email = ?";
+		   jdbcTemplate.update(sql2, email, email);
+		   return true;
 	   }
 	   
 	   // 이메일별 게시글 조회
@@ -36,7 +44,7 @@ public class PostDAO {
 		    String sql = "SELECT * FROM post WHERE email = ?";
 		    List<Post> post = jdbcTemplate.query(sql, new Object[] {email}, new PostRowMapper());
 		    return post;
-		}
+	   }
 	   
 	   // 게시글 수정
 	   public boolean updatePost(int postId, String email, Post post) {
@@ -58,24 +66,52 @@ public class PostDAO {
 		   int count = jdbcTemplate.queryForObject(sql, Integer.class,postId,email);
 		   return count > 0;
 	   }
-		
-	   // 게시글 좋아요수 감소
+	   
+	   // 게시글 좋아요수 감소	   
 	   public boolean decreaseLike(int postId, String email) {
-		   String sql1 = "UPDATE post SET like_count = like_count - 1 WHERE post_id = ?";
-		   jdbcTemplate.update(sql1, postId);
-		   String sql = "DELETE FROM post_like WHERE post_id = ? AND email = ?";
-		   jdbcTemplate.update(sql, postId, email);
+		   String sql1 = "DELETE FROM post_like WHERE post_id = ? AND email = ?";
+		   jdbcTemplate.update(sql1, postId, email);
+		   String sql2 = "UPDATE post SET like_count = "
+	               + "(SELECT COUNT(*) FROM post_like WHERE post_id = ?) "
+	               + "WHERE post_id = ?";
+		   jdbcTemplate.update(sql2, postId, postId);
 		   return false;
 	   }
-		
+//	   public int decreaseLike1(int postId, String email) {
+//	    String sql = "UPDATE post SET like_count = "
+//	               + "(SELECT COUNT(*) FROM post_like WHERE post_id = ?) "
+//	               + "WHERE post_id = ?";
+//	    int updated = jdbcTemplate.update(sql, postId, postId);
+//	    return updated;
+//	}
+//  public boolean decreaseLike2(int postId, String email) {
+//	   String sql = "DELETE FROM post_like WHERE post_id = ? AND email = ?";
+//	   jdbcTemplate.update(sql, postId, email);
+//	   return false;
+//  }
+			
 	   // 게시글 좋아요수 증가
-	   public boolean increaseLike(int postId, String email) {        
-		   String sql1 = "UPDATE post SET like_count = like_count + 1 WHERE post_id = ?";
-		   jdbcTemplate.update(sql1, postId);
-		   String sql2 = "INSERT INTO post_like (post_id, email) VALUES (?, ?)";
-		   jdbcTemplate.update(sql2, postId, email);
+	   public boolean increaseLike(int postId, String email) {
+		   String sql1 = "INSERT INTO post_like (post_id, email) VALUES (?, ?)";
+		   jdbcTemplate.update(sql1, postId, email);
+		   String sql2 = "UPDATE post SET like_count = "
+	               + "(SELECT COUNT(*) FROM post_like WHERE post_id = ?) "
+	               + "WHERE post_id = ?";
+		   jdbcTemplate.update(sql2, postId, postId);
 		   return true;
-	   }		   
+	   }
+//	   public int increaseLike1(int postId, String email) {        
+//	   String sql = "UPDATE post SET like_count = "
+//	               + "(SELECT COUNT(*) FROM post_like WHERE post_id = ?) "
+//	               + "WHERE post_id = ?";
+//	   int updated = jdbcTemplate.update(sql, postId, postId);
+//	   return updated;
+//   }
+//   public boolean increaseLike2(int postId, String email) {
+//	   String sql = "INSERT INTO post_like (post_id, email) VALUES (?, ?)";
+//	   jdbcTemplate.update(sql, postId, email);
+//	   return true;
+//   }
 		
 	   // 사용자 방문 기록 저장
 	   public void saveUserVisit(String email) {

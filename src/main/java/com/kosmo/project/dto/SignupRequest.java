@@ -9,6 +9,7 @@ public class SignupRequest {
     private String password;
     private String nickname;
     private String phone;
+    
     public SignupRequest() { 	
     }
 }
