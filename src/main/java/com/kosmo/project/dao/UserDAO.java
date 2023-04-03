@@ -68,15 +68,13 @@ public class UserDAO {
             user.setNickname(rs.getString("nickname"));
             user.setPhone(rs.getString("phone"));
             user.setGender(rs.getString("gender"));
-            Date date = rs.getDate("birth");
-            if (date != null) { // null 체크 추가
-                user.setBirth(date.toLocalDate());
-            }
-            user.setWebsite(rs.getString("website"));
             user.setIntroduce(rs.getString("introduce"));
             user.setProImage(rs.getString("profile_image"));
             user.setRole(rs.getString("role"));
             user.setVisitCnt(rs.getInt("visit_count"));
+            user.setPostCnt(rs.getInt("post_count"));
+            user.setFollowerCnt(rs.getInt("follower_count"));
+            user.setFollowingCnt(rs.getInt("following_count"));
             return user;
         }
     }    

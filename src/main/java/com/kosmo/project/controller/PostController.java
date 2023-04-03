@@ -61,25 +61,27 @@ public class PostController {
 	//게시글 추가
 	@PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Void> addPost(@Valid @ModelAttribute Post post,@RequestParam(value="file", required = false) MultipartFile file) {
-		// 이런식으로 토큰payload로 정의되어있는 email을 꺼내서 쓸수있다
-		String email = SecurityContextHolder.getContext().getAuthentication().getName();
-		String fileUrl = null;
-	    if(file != null) {
+	    // 이런식으로 토큰payload로 정의되어있는 email을 꺼내서 쓸수있다
+	    String email = SecurityContextHolder.getContext().getAuthentication().getName();
+	    String fileUrl = null;
+	    if (file != null) {
 	        fileUrl = s3Service.saveFile(file);
 	    }
 	    post.setImage_url(fileUrl);
-		boolean result = postDao.addPost(email,post);
-		if(result) {
-			return ResponseEntity.status(HttpStatus.CREATED).build();
-		}else {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
+	    try {
+	        postDao.addPost(email, post);
+	        return ResponseEntity.status(HttpStatus.CREATED).build();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
 	}
 	
 	// 사용자별 게시글 조회
 	@GetMapping("/email/{email}")
 	public ResponseEntity<List<Post>> getPostEmail(@PathVariable(value="email") String email){
 		List<Post> post = postDao.getPostByEmail(email);
+		// 방문자수 증가
 		postDao.saveUserVisit(email);
 		if(post == null) {
 			return ResponseEntity.notFound().build();

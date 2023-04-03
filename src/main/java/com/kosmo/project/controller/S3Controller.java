@@ -28,8 +28,8 @@ public class S3Controller {
    }
    
    // 파일 다운로드
-   @GetMapping("/download/{filename}")
-    public ResponseEntity<byte[]> download(@PathVariable("filename") String filename){
+   @GetMapping("/download/{file}")
+    public ResponseEntity<byte[]> download(@PathVariable("file") String filename){
         HttpHeaders headers=new HttpHeaders();
         headers.add("Content-type", MediaType.ALL_VALUE);
         headers.add("Content-Disposition", "attachment; filename="+filename);

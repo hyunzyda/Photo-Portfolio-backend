@@ -13,6 +13,7 @@ public class Comment {
 	private int post_id;
 	private String email;
 	private String content;
+	private String nickname;
 	private LocalDateTime created_at;
 	private LocalDateTime modified_at;
 	

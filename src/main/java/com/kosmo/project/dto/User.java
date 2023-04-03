@@ -15,13 +15,14 @@ public class User {
     private String nickname;
     private String phone;
     private String gender;
-    private LocalDate birth;
-    private String website;
     private String introduce;
     private String proImage;
     private String role;
     private int visitCnt;
-
+    private int postCnt;
+    private int followerCnt;
+    private int followingCnt;
+    
     public User() {
     }
     public User(String email, String password) {

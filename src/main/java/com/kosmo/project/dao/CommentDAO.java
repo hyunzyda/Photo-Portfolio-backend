@@ -28,9 +28,11 @@ public class CommentDAO {
     
     // 댓글 추가
     public boolean addComment(String email,int post_id,Comment comment) {
-    	String sql = "INSERT INTO comment (email,post_id,content,created_at) VALUES (?,?,?,?)";
-    	int result =  jdbcTemplate.update(sql,email, post_id, comment.getContent(), LocalDateTime.now());
-    	return result > 0;  			
+        String sql1 = "INSERT INTO comment (email,post_id,content,created_at,nickname) VALUES (?,?,?,?,?)";
+        String sql2 = "SELECT nickname FROM user WHERE email = ?";
+        String nickname = jdbcTemplate.queryForObject(sql2, new Object[] { email }, String.class);
+        int result =  jdbcTemplate.update(sql1,email, post_id, comment.getContent(), LocalDateTime.now(), nickname);
+        return result > 0;  			
     }
     
     // 댓글 삭제
@@ -48,6 +50,7 @@ public class CommentDAO {
 		   cm.setPost_id(rs.getInt("post_id"));
 		   cm.setEmail(rs.getString("email"));
 		   cm.setContent(rs.getString("content"));
+		   cm.setNickname(rs.getString("nickname"));
 		   cm.setCreated_at(rs.getTimestamp("created_at").toLocalDateTime());
 		   cm.setModified_at(rs.getTimestamp("modified_at").toLocalDateTime());
 		   return cm;

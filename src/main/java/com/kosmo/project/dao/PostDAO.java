@@ -30,12 +30,14 @@ public class PostDAO {
 		}
 	   
 	   // 게시글 추가
-	   public boolean addPost(String email,Post post) {
-		   String sql1 = "INSERT INTO post (email, image_url, content, category, created_at) VALUES(?,?,?,?,?)";
-		   jdbcTemplate.update(sql1, email, post.getImage_url(), post.getContent(), post.getCategory(), LocalDateTime.now());
-		   String sql2 = "UPDATE user SET post_count = (SELECT COUNT(*) FROM post WHERE email = ?) WHERE email = ?";
-		   jdbcTemplate.update(sql2, email, email);
-		   return true;
+	   public void addPost(String email,Post post) {
+		    String sql1 = "INSERT INTO post (email, image_url, content, category, created_at, nickname) VALUES(?,?,?,?,?,?)";
+		    String sql2 = "SELECT nickname FROM user WHERE email = ?";
+		    String nickname = jdbcTemplate.queryForObject(sql2, new Object[]{email}, String.class);
+		    jdbcTemplate.update(sql1, email, post.getImage_url(), post.getContent(), post.getCategory(), LocalDateTime.now(), nickname);
+		    String sql3 = "UPDATE user SET post_count = (SELECT COUNT(*) FROM post WHERE email = ?) WHERE email = ?";
+		    jdbcTemplate.update(sql3, email, email);
+		    post.setNickname(nickname);
 	   }
 	   
 	   // 이메일별 게시글 조회
@@ -77,18 +79,6 @@ public class PostDAO {
 		   jdbcTemplate.update(sql2, postId, postId);
 		   return false;
 	   }
-//	   public int decreaseLike1(int postId, String email) {
-//	    String sql = "UPDATE post SET like_count = "
-//	               + "(SELECT COUNT(*) FROM post_like WHERE post_id = ?) "
-//	               + "WHERE post_id = ?";
-//	    int updated = jdbcTemplate.update(sql, postId, postId);
-//	    return updated;
-//	}
-//  public boolean decreaseLike2(int postId, String email) {
-//	   String sql = "DELETE FROM post_like WHERE post_id = ? AND email = ?";
-//	   jdbcTemplate.update(sql, postId, email);
-//	   return false;
-//  }
 			
 	   // 게시글 좋아요수 증가
 	   public boolean increaseLike(int postId, String email) {
@@ -100,18 +90,6 @@ public class PostDAO {
 		   jdbcTemplate.update(sql2, postId, postId);
 		   return true;
 	   }
-//	   public int increaseLike1(int postId, String email) {        
-//	   String sql = "UPDATE post SET like_count = "
-//	               + "(SELECT COUNT(*) FROM post_like WHERE post_id = ?) "
-//	               + "WHERE post_id = ?";
-//	   int updated = jdbcTemplate.update(sql, postId, postId);
-//	   return updated;
-//   }
-//   public boolean increaseLike2(int postId, String email) {
-//	   String sql = "INSERT INTO post_like (post_id, email) VALUES (?, ?)";
-//	   jdbcTemplate.update(sql, postId, email);
-//	   return true;
-//   }
 		
 	   // 사용자 방문 기록 저장
 	   public void saveUserVisit(String email) {
@@ -128,6 +106,7 @@ public class PostDAO {
 			   post.setContent(rs.getString("content"));
 			   post.setImage_url(rs.getString("image_url"));
 			   post.setCategory(rs.getString("category"));
+			   post.setNickname(rs.getString("nickname"));
 			   post.setLikeCnt(rs.getInt("like_count"));
 			   post.setCreated_at(rs.getTimestamp("created_at").toLocalDateTime());
 			   post.setModified_at(rs.getTimestamp("modified_at").toLocalDateTime());

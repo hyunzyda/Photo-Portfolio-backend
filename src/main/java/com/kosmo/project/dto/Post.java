@@ -15,6 +15,7 @@ public class Post {
 	private String content;
 	private String image_url;
 	private String category;
+	private String nickname;
 	private int likeCnt;
 	private LocalDateTime created_at;
 	private LocalDateTime modified_at;
