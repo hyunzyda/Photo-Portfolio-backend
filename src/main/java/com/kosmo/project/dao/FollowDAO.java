@@ -42,7 +42,7 @@ public class FollowDAO {
 
 	// 팔로우 추가
 	public boolean createFollow(String myEmail,String email) {
-		String sql1 = "INSERT INTO user_follow (follower,user) VALUES (?,?)";
+		String sql1 = "INSERT INTO user_follow (follower,user,is_follow) VALUES (?,?,'1')";
 		jdbcTemplate.update(sql1,myEmail,email);
 		String sql2 = "UPDATE user SET follower_count = "
 	               + "(SELECT COUNT(*) FROM user_follow WHERE user = ?) "
@@ -71,7 +71,7 @@ public class FollowDAO {
 				+ "JOIN user_follow f ON u.email = f.follower "
 				+ "WHERE f.user = ?";
 		return jdbcTemplate.query(sql, new UserRowMapper(), email);
-	}
+	} 
 	
     private class UserRowMapper implements RowMapper<User> {
         @Override
@@ -91,5 +91,6 @@ public class FollowDAO {
             user.setFollowingCnt(rs.getInt("following_count"));
             return user;
         }
-    }    
+    }
+
 }

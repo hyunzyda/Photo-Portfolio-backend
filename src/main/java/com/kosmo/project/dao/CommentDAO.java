@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -27,12 +28,23 @@ public class CommentDAO {
     
     
     // 댓글 추가
-    public boolean addComment(String email,int post_id,Comment comment) {
+//    public boolean addComment(String email,int post_id,Comment comment) {
+//        String sql1 = "INSERT INTO comment (email,post_id,content,created_at,nickname) VALUES (?,?,?,?,?)";
+//        String sql2 = "SELECT nickname FROM user WHERE email = ?";
+//        String nickname = jdbcTemplate.queryForObject(sql2, new Object[] { email }, String.class);
+//        int result =  jdbcTemplate.update(sql1,email, post_id, comment.getContent(), LocalDateTime.now(), nickname);
+//        return result > 0;  			
+//    }
+    
+    public Comment addComment(String email,int post_id,Comment comment) {
         String sql1 = "INSERT INTO comment (email,post_id,content,created_at,nickname) VALUES (?,?,?,?,?)";
         String sql2 = "SELECT nickname FROM user WHERE email = ?";
         String nickname = jdbcTemplate.queryForObject(sql2, new Object[] { email }, String.class);
-        int result =  jdbcTemplate.update(sql1,email, post_id, comment.getContent(), LocalDateTime.now(), nickname);
-        return result > 0;  			
+        jdbcTemplate.update(sql1,email, post_id, comment.getContent(), LocalDateTime.now(), nickname);
+        
+        String sql3 = "SELECT * FROM comment WHERE email = ? AND post_id = ? AND content = ?";
+        Comment comments = jdbcTemplate.queryForObject(sql3, new Object[] { email, post_id, comment.getContent() },new CommentRowMapper());
+        return comments;  			
     }
     
     // 댓글 삭제

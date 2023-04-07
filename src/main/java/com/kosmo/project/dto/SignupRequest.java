@@ -1,15 +1,15 @@
 package com.kosmo.project.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter
+@NoArgsConstructor
 public class SignupRequest {
     private String email;
     private String password;
     private String nickname;
     private String phone;
-    
-    public SignupRequest() { 	
-    }
+    private String gender;
 }

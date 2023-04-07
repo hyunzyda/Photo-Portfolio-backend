@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -40,6 +41,21 @@ public class PostDAO {
 		    post.setNickname(nickname);
 	   }
 	   
+	   // 게시글 추가
+//	   public Post addPost(String email,Post post) {
+//		    String sql1 = "INSERT INTO post (email, image_url, content, category, created_at, nickname) VALUES(?,?,?,?,?,?)";
+//		    String sql2 = "SELECT nickname FROM user WHERE email = ?";
+//		    String nickname = jdbcTemplate.queryForObject(sql2, new Object[]{email}, String.class);
+//		    jdbcTemplate.update(sql1, email, post.getImage_url(), post.getContent(), post.getCategory(), LocalDateTime.now(), nickname);
+//		    String sql3 = "UPDATE user SET post_count = (SELECT COUNT(*) FROM post WHERE email = ?) WHERE email = ?";
+//		    jdbcTemplate.update(sql3, email, email);
+//		    post.setNickname(nickname);
+//		    
+//		    String sql4 = "SELECT * FROM post WHERE email = ? AND content = ?";
+//		    Post posts = jdbcTemplate.queryForObject(sql4, new Object[] { email, post.getContent() }, new PostRowMapper());
+//	        return posts;  
+//	   }
+	   
 	   // 이메일별 게시글 조회
 	   @SuppressWarnings("deprecation")
 	   public List<Post> getPostByEmail(String email) {
@@ -61,7 +77,7 @@ public class PostDAO {
 		   int count = jdbcTemplate.update(sql, postId);
 		   return count > 0;
 	   }
-
+	   
 	   // 이전에 게시글 좋아요 클릭여부 확인
 	   public boolean checkLike(int postId, String email) {
 		   String sql = "SELECT COUNT(*) FROM post_like WHERE post_id = ? AND email = ?";
@@ -82,7 +98,7 @@ public class PostDAO {
 			
 	   // 게시글 좋아요수 증가
 	   public boolean increaseLike(int postId, String email) {
-		   String sql1 = "INSERT INTO post_like (post_id, email) VALUES (?, ?)";
+		   String sql1 = "INSERT INTO post_like (post_id, email,is_liked) VALUES (?, ?,'1')";
 		   jdbcTemplate.update(sql1, postId, email);
 		   String sql2 = "UPDATE post SET like_count = "
 	               + "(SELECT COUNT(*) FROM post_like WHERE post_id = ?) "

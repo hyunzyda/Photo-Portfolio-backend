@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .csrf().disable()
             .cors().and()
             .authorizeRequests()
-            .antMatchers("/login", "/signup", "/user/all","/post","/post/email/**").permitAll()
+            .antMatchers("/login", "/signup", "/user/all","/post/**","/like/**","/comment/**").permitAll()
             .antMatchers(HttpMethod.POST, "/**").authenticated()
             .antMatchers(HttpMethod.GET, "/**").authenticated()
             .antMatchers(HttpMethod.PUT, "/**").authenticated()
@@ -45,43 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .addFilterBefore(new JwtFilter(authDao, secretKey), UsernamePasswordAuthenticationFilter.class);
     }
 
-    // 패스워드 암호화를 위한 Bean 등록
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 }
-
-//@Configuration
-//@EnableWebSecurity
-//@RequiredArgsConstructor
-//public class SecurityConfig{
-//	
-//	private final AuthDAO authDao;
-//	
-//	@Value("${jwt.secret}")
-//	private String secretKey;
-//
-//	@Bean
-//	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-//		return httpSecurity
-//				.httpBasic().disable()
-//				.csrf().disable()
-//				.cors().and()
-//				.authorizeRequests()
-//				.antMatchers("/login,/signup,/public/**").permitAll()
-//				.antMatchers(HttpMethod.GET,"/**").authenticated()
-//				.and()
-//				.sessionManagement()
-//				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//				.and()
-//				.addFilterBefore(new JwtFilter(authDao,secretKey),UsernamePasswordAuthenticationFilter.class)
-//				.build();
-//	}
-//	
-//    // 패스워드 암호화를 위한 Bean 등록
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-//}
+// addFilterBefore를 이용해 filter를 추가하고 UsernamePasswordAuthenticationFilter클래스가 실행되기 전에 실행되도록 앞에 써준다.
+// JwtFilter가 실행되면 클라이언트가 전달한 JWT 토큰을 검증하고, 유효한 토큰이라면 토큰에서 추출한 인증 정보를 
+// Spring Security의 SecurityContextHolder에 저장한다. SecurityContextHolder가 가진 Authentication객체에 토큰의 페이로드값이 저장되어있다.

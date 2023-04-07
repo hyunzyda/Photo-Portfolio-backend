@@ -33,6 +33,28 @@ public class FollowController {
 		}
 	}
 	
+	// 계정별로 팔로잉하는 유저정보
+	@GetMapping("/following/{email}")
+	public ResponseEntity<List<User>> getAllFollowings(@PathVariable String email){
+		List<User> follow = followDao.getAllFollowing(email);
+		if(follow.size()>0) {
+			return ResponseEntity.ok(follow);
+		}else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
+	// 계정별로 팔로우하는 유저정보
+	@GetMapping("/follower/{email}")
+	public  ResponseEntity<List<User>> getAllFollowers(@PathVariable String email){
+		List<User> follow = followDao.getAllFollower(email);
+		if(follow.size()>0) {
+			return ResponseEntity.ok(follow);
+		}else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
 	// 내가 팔로우 하는 유저정보
 	@GetMapping("/following")
 	public  ResponseEntity<List<User>> getAllFollowing(){

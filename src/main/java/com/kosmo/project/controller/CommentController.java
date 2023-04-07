@@ -34,13 +34,13 @@ public class CommentController {
 		return ResponseEntity.ok().body(comment);
 	}
 	
-	// 댓글 추가
+	// 댓글 추가	
 	@PostMapping("/{postId}")
 	public ResponseEntity<Comment> addComment(@PathVariable(value="postId") int post_id ,@Valid @RequestBody Comment comment){
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
-		boolean result = commentDao.addComment(email,post_id,comment);
-		if(result) {
-			return ResponseEntity.status(HttpStatus.CREATED).build();
+		Comment comments = commentDao.addComment(email,post_id,comment);
+		if(comments != null) {
+			return ResponseEntity.ok(comments);
 		} else {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}	

@@ -27,7 +27,7 @@ public class AuthController {
                     .body(false);
         }
         
-        User user = new User(signUpRequest.getEmail(),signUpRequest.getPassword(), signUpRequest.getNickname(), signUpRequest.getPhone());
+        User user = new User(signUpRequest.getEmail(),signUpRequest.getPassword(), signUpRequest.getNickname(), signUpRequest.getPhone(),signUpRequest.getGender());
         int result = authDAO.createUser(user);
 
         if (result > 0) {
@@ -49,10 +49,6 @@ public class AuthController {
             // JWT 토큰 생성
             String token = authDAO.createToken(email);
             return ResponseEntity.ok().body(token);
-//          토큰을 헤더에 담아서 전달
-//          HttpHeaders headers = new HttpHeaders();
-//          headers.setBearerAuth(token);
-//          return ResponseEntity.ok().headers(headers).build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 에러");
         }

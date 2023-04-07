@@ -30,8 +30,8 @@ public class AuthDAO {
     }    
 
     public int createUser(User user) {
-        String sql = "INSERT INTO user(email, password, nickname, phone) VALUES (?, ?, ?, ?)";
-        return jdbcTemplate.update(sql, user.getEmail(), user.getPassword(), user.getNickname(), user.getPhone());
+        String sql = "INSERT INTO user(email, password, nickname, phone, gender) VALUES (?, ?, ?, ?, ?)";
+        return jdbcTemplate.update(sql, user.getEmail(), user.getPassword(), user.getNickname(), user.getPhone(), user.getGender());
     }
     
     public boolean existsByUsername(String email) {
@@ -63,6 +63,7 @@ public class AuthDAO {
             user.setPassword(rs.getString("password"));
             user.setNickname(rs.getString("nickname"));
             user.setPhone(rs.getString("phone"));
+            user.setGender(rs.getString("gender"));
             return user;
         }
     }

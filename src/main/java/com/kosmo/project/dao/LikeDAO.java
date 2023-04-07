@@ -21,6 +21,13 @@ public class LikeDAO {
 	   String sql = "SELECT * FROM post_like";
 	   return jdbcTemplate.query(sql, new PostLikeRowMapper());
    }
+ 
+   @SuppressWarnings("deprecation")
+   public List<PostLike> getLikesByEmail(String email, int postId) {
+	   String sql = "SELECT * FROM post_like WHERE email = ? AND post_id = ?";
+	   List<PostLike> post = jdbcTemplate.query(sql, new Object[]{email, postId}, new PostLikeRowMapper());
+	   return post;
+   }
    
    private class PostLikeRowMapper implements RowMapper<PostLike>{
 	   @Override
@@ -29,6 +36,7 @@ public class LikeDAO {
 		   pl.setPostLikeId(rs.getInt("post_like_id"));
 		   pl.setEmail(rs.getString("email"));
 		   pl.setPostId(rs.getInt("post_id"));
+		   pl.setPostLikeId(rs.getInt("is_liked"));
 		   return pl;
 		   
 	   }

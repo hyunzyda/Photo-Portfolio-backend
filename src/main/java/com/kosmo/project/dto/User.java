@@ -1,13 +1,13 @@
 package com.kosmo.project.dto;
 
-import java.time.LocalDate;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     private String email;
@@ -22,18 +22,17 @@ public class User {
     private int postCnt;
     private int followerCnt;
     private int followingCnt;
-    
-    public User() {
-    }
+
     public User(String email, String password) {
     	this.email=email;
     	this.password=password;
     }
     
-    public User(String email,String password, String nickname, String phone) {
+    public User(String email,String password, String nickname, String phone, String gender) {
     	this.email=email;
     	this.password=password;
     	this.nickname=nickname;
     	this.phone=phone;
+    	this.gender=gender;
     }
 }

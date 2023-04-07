@@ -61,7 +61,6 @@ public class PostController {
 	//게시글 추가
 	@PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Void> addPost(@Valid @ModelAttribute Post post,@RequestParam(value="file", required = false) MultipartFile file) {
-	    // 이런식으로 토큰payload로 정의되어있는 email을 꺼내서 쓸수있다
 	    String email = SecurityContextHolder.getContext().getAuthentication().getName();
 	    String fileUrl = null;
 	    if (file != null) {
